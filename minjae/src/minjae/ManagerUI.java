@@ -30,7 +30,7 @@ import java.awt.event.MouseEvent;
 
 public class ManagerUI extends JFrame {
 	private JPanel contentPane;
-	private JTable table;
+	private JTable tbl_Customer;
 	private final JComboBox cmb_Search = new JComboBox();
 	private JTextField txtF_Search;
 	Object value;
@@ -89,16 +89,16 @@ public class ManagerUI extends JFrame {
 			i++;
 		}
 
-		table = new JTable();
-		table.setCellSelectionEnabled(true);
-		table.setModel(new DefaultTableModel(obj, new String[] { "\uACE0\uAC1D", "\uBC88\uD638" }) {
+		tbl_Customer = new JTable();
+		tbl_Customer.setCellSelectionEnabled(true);
+		tbl_Customer.setModel(new DefaultTableModel(obj, new String[] { "\uACE0\uAC1D", "\uBC88\uD638" }) {
 			public boolean isCellEditable(int row, int column) {
 				return false;
 			};
 		});
-		table.getTableHeader().setReorderingAllowed(false);
-		table.getColumn("\uACE0\uAC1D").setCellRenderer(new SelectCellRenderer());
-		table.getColumn("\uBC88\uD638").setCellRenderer(new SelectCellRenderer());
+		tbl_Customer.getTableHeader().setReorderingAllowed(false);
+		tbl_Customer.getColumn("\uACE0\uAC1D").setCellRenderer(new SelectCellRenderer());
+		tbl_Customer.getColumn("\uBC88\uD638").setCellRenderer(new SelectCellRenderer());
 
 		// °Ë»öÃ¢
 		txtF_Search = new JTextField();
@@ -117,13 +117,13 @@ public class ManagerUI extends JFrame {
 						obj[i][1] = beans.getPhone();
 						i++;
 					}
-					table.setModel(new DefaultTableModel(obj, new String[] { "\uACE0\uAC1D", "\uBC88\uD638" }) {
+					tbl_Customer.setModel(new DefaultTableModel(obj, new String[] { "\uACE0\uAC1D", "\uBC88\uD638" }) {
 						public boolean isCellEditable(int row, int column) {
 							return false;
 						};
 					});
-					table.getColumn("\uACE0\uAC1D").setCellRenderer(new SelectCellRenderer());
-					table.getColumn("\uBC88\uD638").setCellRenderer(new SelectCellRenderer());
+					tbl_Customer.getColumn("\uACE0\uAC1D").setCellRenderer(new SelectCellRenderer());
+					tbl_Customer.getColumn("\uBC88\uD638").setCellRenderer(new SelectCellRenderer());
 
 				} else if (cmb_Search.getSelectedItem().toString() == "\uC774\uB984") {
 
@@ -136,13 +136,13 @@ public class ManagerUI extends JFrame {
 						obj[i][1] = beans.getPhone();
 						i++;
 					}
-					table.setModel(new DefaultTableModel(obj, new String[] { "\uACE0\uAC1D", "\uBC88\uD638" }) {
+					tbl_Customer.setModel(new DefaultTableModel(obj, new String[] { "\uACE0\uAC1D", "\uBC88\uD638" }) {
 						public boolean isCellEditable(int row, int column) {
 							return false;
 						};
 					});
-					table.getColumn("\uACE0\uAC1D").setCellRenderer(new SelectCellRenderer());
-					table.getColumn("\uBC88\uD638").setCellRenderer(new SelectCellRenderer());
+					tbl_Customer.getColumn("\uACE0\uAC1D").setCellRenderer(new SelectCellRenderer());
+					tbl_Customer.getColumn("\uBC88\uD638").setCellRenderer(new SelectCellRenderer());
 
 				}
 			}
@@ -150,7 +150,7 @@ public class ManagerUI extends JFrame {
 
 		txtF_Search.setColumns(10);
 
-		scrollPane.setViewportView(table);
+		scrollPane.setViewportView(tbl_Customer);
 
 		JButton btn_Insert = new JButton("\uCD94\uAC00");
 
@@ -158,9 +158,9 @@ public class ManagerUI extends JFrame {
 		btn_Neil.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				row = table.getSelectedRow();
-				column = table.getSelectedColumn();
-				value = table.getValueAt(row, 1);
+				row = tbl_Customer.getSelectedRow();
+				column = tbl_Customer.getSelectedColumn();
+				value = tbl_Customer.getValueAt(row, 1);
 				System.out.println(value);
 				new SubUI(value,1);
 			}
@@ -170,9 +170,9 @@ public class ManagerUI extends JFrame {
 		btn_Eye.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				row = table.getSelectedRow();
-				column = table.getSelectedColumn();
-				value = table.getValueAt(row, 1);
+				row = tbl_Customer.getSelectedRow();
+				column = tbl_Customer.getSelectedColumn();
+				value = tbl_Customer.getValueAt(row, 1);
 				System.out.println(value);
 				new SubUI(value,2);
 			}

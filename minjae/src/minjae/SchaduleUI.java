@@ -18,6 +18,7 @@ import minjae.ManagerUI.SelectCellRenderer;
 import java.awt.Dimension;
 import javax.swing.JButton;
 import javax.swing.LayoutStyle.ComponentPlacement;
+import com.toedter.calendar.JDateChooser;
 
 public class SchaduleUI extends JFrame {
 
@@ -52,27 +53,35 @@ public class SchaduleUI extends JFrame {
 		
 		JScrollPane scrollPane = new JScrollPane();
 		
-		JButton button = new JButton("\uCD94\uAC00");
+		JButton btn_ScaduleAdd = new JButton("\uCD94\uAC00");
+		
+		JDateChooser scaduleCalender = new JDateChooser();
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
-			gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 474, Short.MAX_VALUE)
-				.addGroup(Alignment.TRAILING, gl_contentPane.createSequentialGroup()
+			gl_contentPane.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_contentPane.createSequentialGroup()
 					.addContainerGap()
-					.addComponent(button, GroupLayout.PREFERRED_SIZE, 135, GroupLayout.PREFERRED_SIZE)
-					.addGap(12))
+					.addComponent(scaduleCalender, GroupLayout.PREFERRED_SIZE, 202, GroupLayout.PREFERRED_SIZE)
+					.addGap(164)
+					.addComponent(btn_ScaduleAdd, GroupLayout.PREFERRED_SIZE, 84, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap())
+				.addComponent(scrollPane, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 474, Short.MAX_VALUE)
 		);
 		gl_contentPane.setVerticalGroup(
 			gl_contentPane.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_contentPane.createSequentialGroup()
-					.addComponent(button)
-					.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 524, GroupLayout.PREFERRED_SIZE))
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
+						.addComponent(btn_ScaduleAdd, GroupLayout.DEFAULT_SIZE, 23, Short.MAX_VALUE)
+						.addComponent(scaduleCalender, GroupLayout.PREFERRED_SIZE, 23, Short.MAX_VALUE))
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 508, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap())
 		);
 		
 		table = new JTable();
+		table.setColumnSelectionAllowed(true);
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
-		table.setRowHeight(26);
+		table.setRowHeight(25);
 		table.setFillsViewportHeight(true);
 		table.setModel(new DefaultTableModel(
 			new Object[][] {
