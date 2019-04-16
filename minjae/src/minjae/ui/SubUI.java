@@ -1,4 +1,4 @@
-package minjae;
+package minjae.ui;
 
 import java.awt.Component;
 import java.awt.EventQueue;
@@ -15,7 +15,9 @@ import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
-import minjae.ManagerUI.SelectCellRenderer;
+import minjae.dao.DB;
+import minjae.dto.Customer_Beans;
+import minjae.dto.Total_Beans;
 
 import java.awt.Font;
 import java.util.List;

@@ -1,4 +1,4 @@
-package minjae;
+package minjae.dao;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -10,6 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.print.attribute.standard.PresentationDirection;
+
+import minjae.dto.Customer_Beans;
+import minjae.dto.Total_Beans;
 
 public class DB {
 	static {

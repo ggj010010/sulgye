@@ -1,4 +1,4 @@
-package minjae;
+package minjae.ui;
 
 import java.awt.Component;
 import java.awt.EventQueue;
@@ -23,6 +23,10 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+
+import minjae.dao.DB;
+import minjae.dto.Customer_Beans;
+
 import javax.swing.JButton;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import java.awt.event.MouseAdapter;

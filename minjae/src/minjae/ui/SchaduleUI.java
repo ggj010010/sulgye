@@ -1,4 +1,4 @@
-package minjae;
+package minjae.ui;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -14,7 +14,6 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
-import minjae.ManagerUI.SelectCellRenderer;
 import java.awt.Dimension;
 import javax.swing.JButton;
 import javax.swing.LayoutStyle.ComponentPlacement;

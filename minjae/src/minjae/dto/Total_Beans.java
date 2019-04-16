@@ -1,4 +1,4 @@
-package minjae;
+package minjae.dto;
 
 public class Total_Beans {
 	int No;

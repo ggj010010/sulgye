@@ -1,4 +1,4 @@
-package minjae;
+package minjae.dto;
 
 public class Customer_Beans {
 	int No;
