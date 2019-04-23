@@ -1,22 +1,23 @@
 package minjae.ui;
 
-import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.EventQueue;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.util.Date;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
-import java.awt.Dimension;
-import javax.swing.JButton;
-import javax.swing.LayoutStyle.ComponentPlacement;
 import com.toedter.calendar.JDateChooser;
 
 public class SchaduleUI extends JFrame {
@@ -55,6 +56,16 @@ public class SchaduleUI extends JFrame {
 		JButton btn_ScaduleAdd = new JButton("\uCD94\uAC00");
 		
 		JDateChooser scaduleCalender = new JDateChooser();
+		scaduleCalender.getDateEditor().addPropertyChangeListener(
+			    new PropertyChangeListener() {
+			        @Override
+			        public void propertyChange(PropertyChangeEvent e) {
+			            if ("date".equals(e.getPropertyName())) {
+			                System.out.println(e.getNewValue());
+			            }
+			        }
+			    });
+		
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
 			gl_contentPane.createParallelGroup(Alignment.TRAILING)
