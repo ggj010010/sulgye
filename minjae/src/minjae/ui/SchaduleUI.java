@@ -1,13 +1,13 @@
 package minjae.ui;
 
-import java.awt.Component;
 import java.awt.EventQueue;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.Calendar;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Vector;
 
 import javax.swing.GroupLayout;
@@ -19,16 +19,20 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.EmptyBorder;
-import javax.swing.table.DefaultTableCellRenderer;
 
 import com.toedter.calendar.JDateChooser;
+
+import minjae.dao.DB;
+import minjae.dao.scheduleDAO;
+import minjae.dto.CustomerDTO;
+import minjae.dto.scheduleDTO;
 
 public class SchaduleUI extends JFrame {
 
 	private JPanel contentPane;
 //	private JTable table;
-	final MultiSpanCellTable table;
-	final CellSpan cellAtt;
+	MultiSpanCellTable table;
+	CellSpan cellAtt;
 	
 	/**
 	 * Launch the application.
@@ -50,6 +54,10 @@ public class SchaduleUI extends JFrame {
 	 * Create the frame.
 	 */
 	public SchaduleUI() {
+		DB db = DB.sharedInstance();
+		scheduleDAO sd = new scheduleDAO();
+		JDateChooser scaduleCalender = new JDateChooser();
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 500, 600);
 		contentPane = new JPanel();
@@ -64,6 +72,7 @@ public class SchaduleUI extends JFrame {
 			public void mouseClicked(MouseEvent arg0) {
 				int[] columns = table.getSelectedColumns();
 				int[] rows = table.getSelectedRows();
+				System.out.println(rows);
 				cellAtt.combine(rows, columns);
 				table.clearSelection();
 				table.revalidate();
@@ -71,7 +80,8 @@ public class SchaduleUI extends JFrame {
 			}
 		});
 		
-		JDateChooser scaduleCalender = new JDateChooser();
+		
+		
 		scaduleCalender.setDate(new Date());
 		scaduleCalender.getDateEditor().addPropertyChangeListener(
 			    new PropertyChangeListener() {
@@ -106,6 +116,8 @@ public class SchaduleUI extends JFrame {
 					.addContainerGap())
 		);
 		
+		
+		
 		Object[] c = new Object[] {
 				"10:30~11:00",
 				"11:00~11:30",
@@ -130,86 +142,49 @@ public class SchaduleUI extends JFrame {
 		
 		Vector dataColumnName = new Vector();
 		dataColumnName.addElement("\uC2DC\uAC04");
-		dataColumnName.addElement("\uC6D0\uC7A5");
-		dataColumnName.addElement("\uC870\uC324");
-//		System.out.println(dataColumnName);
+		dataColumnName.addElement("¿¹¾à");
 		
 		Vector rowData2 = new Vector();
 		for(int i =0;i<c.length;i++) {
 			Vector rowData = new Vector();
 			rowData.addElement(c[i]);
 			rowData.addElement(null);
-			rowData.addElement(null);
 			rowData2.addElement(rowData);
-//			System.out.println(rowData);
 			}
-//		System.out.println(rowData2);
 		
 		
 		AttributiveCellTableModel ml = new AttributiveCellTableModel(rowData2,dataColumnName);
 		cellAtt = (CellSpan) ml.getCellAttribute();
 		table = new MultiSpanCellTable(ml);
 		
-//		table = new JTable();
+		Date d =(Date) scaduleCalender.getDate();
+		SimpleDateFormat sdf= new SimpleDateFormat("yy/MM/dd");
+		String s = sdf.format(d);
+		List<scheduleDTO> sd_list = sd.getSchedule(s);
+		
+		for (scheduleDTO beans : sd_list) {
+			int si = beans.getStartIndex();
+			int ei = beans.getEndIndex();
+			int[] rows = new int[ei-si+1];
+			for(int i = 0;si<ei;i++,si++) {
+				rows[i] = si;
+			}
+			int[] columns = {1};
+			cellAtt.combine(rows, columns);
+			table.clearSelection();
+			table.revalidate();
+			table.repaint();
+		}
+		
 		table.setColumnSelectionAllowed(true);
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 		table.setRowHeight(25);
 		table.setFillsViewportHeight(true);
-//		table.setModel(new DefaultTableModel(
-//			new Object[][] {
-//				{"10:30~11:00", null, null},
-//				{"11:00~11:30", null, null},
-//				{"11:30~12:00", null, null},
-//				{"12:00~12:30", null, null},
-//				{"12:30~13:00", null, null},
-//				{"13:00~13:30", null, null},
-//				{"13:30~14:00", null, null},
-//				{"14:00~14:30", null, null},
-//				{"14:30~15:00", null, null},
-//				{"15:00~15:30", null, null},
-//				{"15:30~16:00", null, null},
-//				{"16:00~16:30", null, null},
-//				{"16:30~17:00", null, null},
-//				{"17:00~17:30", null, null},
-//				{"17:30~18:00", null, null},
-//				{"18:00~18:30", null, null},
-//				{"18:30~19:00", null, null},
-//				{"19:00~19:30", null, null},
-//				{"19:30~", null, null},
-//			},
-//			new String[] {
-//				"\uC2DC\uAC04", "\uC6D0\uC7A5", "\uC870\uC324"
-//			}
-//		));
 		table.getColumnModel().getColumn(0).setPreferredWidth(85);
 		table.getColumnModel().getColumn(0).setMaxWidth(100);
-		
-//		table.getColumn("\uC2DC\uAC04").setCellRenderer(new SelectCellRenderer());
-//		table.getColumn("\uC6D0\uC7A5").setCellRenderer(new SelectCellRenderer());
 		
 		scrollPane.setViewportView(table);
 		contentPane.setLayout(gl_contentPane);
 	}
 	
-//	class SelectCellRenderer extends DefaultTableCellRenderer {
-//
-//		public SelectCellRenderer() {
-//
-//			setOpaque(true);
-//			setHorizontalAlignment(0);
-//
-//		}
-//
-//		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
-//				int row, int column) {
-//
-//			Component cell = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-//
-//			if (isSelected && hasFocus)
-//				System.out.println("I am cell in row " + row + " and column " + column);
-//
-//			return cell;
-//
-//		}
-//	}
 }

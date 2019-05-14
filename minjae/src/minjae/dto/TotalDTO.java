@@ -1,6 +1,6 @@
 package minjae.dto;
 
-public class Total_Beans {
+public class TotalDTO {
 	int No;
 	int total_class;
 	int CustId;

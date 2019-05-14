@@ -300,13 +300,32 @@ class DefaultCellAttribute
 			for (int j = 0, jj = 0; j < columnSpan; j++, jj--) {
 				span[startRow + i][startColumn + j][CellSpan.COLUMN] = jj;
 				span[startRow + i][startColumn + j][CellSpan.ROW] = ii;
-				// System.out.println("r " +ii +" c " +jj);
+//				 System.out.println("r " +ii +" c " +jj);
 			}
 		}
 		span[startRow][startColumn][CellSpan.COLUMN] = columnSpan;
 		span[startRow][startColumn][CellSpan.ROW] = rowSpan;
 
 	}
+//	
+//	public void combineStart(int[] rows) {
+//		if (isOutOfBounds2(rows))
+//			return;
+//		int rowSpan = rows.length;
+//		int startRow = rows[0];
+//		for (int i = 0; i < rowSpan; i++) {
+//				if (span[startRow + i][1][CellSpan.ROW] != 1) {
+//					// System.out.println("can't combine");
+//					return;
+//				}
+//			}
+//		for (int i = 0, ii = 0; i < rowSpan; i++, ii--) {
+//				span[startRow + i][1][CellSpan.ROW] = ii;
+////				 System.out.println("r " +ii +" c " +jj);
+//			}
+//		span[startRow][1][CellSpan.ROW] = rowSpan;
+//
+//	}
 
 	public void split(int row, int column) {
 		if (isOutOfBounds(row, column))
@@ -401,6 +420,14 @@ class DefaultCellAttribute
 		}
 		return false;
 	}
+	
+//	protected boolean isOutOfBounds2(int[] rows) {
+//		for (int i = 0; i < rows.length; i++) {
+//			if ((rows[i] < 0) || (rowSize <= rows[i]))
+//				return true;
+//		}
+//		return false;
+//	}
 
 	protected void setValues(Object[][] target, Object value, int[] rows, int[] columns) {
 		for (int i = 0; i < rows.length; i++) {

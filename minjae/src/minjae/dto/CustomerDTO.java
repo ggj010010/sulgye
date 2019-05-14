@@ -1,15 +1,15 @@
 package minjae.dto;
 
-public class Customer_Beans {
+public class CustomerDTO {
 	int No;
 	String Name;
 	String Phone;
 	
-	public Customer_Beans() {
+	public CustomerDTO() {
 		super();
 	}
 	
-	public Customer_Beans(int No,String Name,String Phone) {
+	public CustomerDTO(int No,String Name,String Phone) {
 		super();
 		this.No = No;
 		this.Name = Name;

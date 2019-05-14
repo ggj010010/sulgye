@@ -16,8 +16,10 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 import minjae.dao.DB;
-import minjae.dto.Customer_Beans;
-import minjae.dto.Total_Beans;
+import minjae.dao.ManagerDAO;
+import minjae.dao.TotalDAO;
+import minjae.dto.CustomerDTO;
+import minjae.dto.TotalDTO;
 
 import java.awt.Font;
 import java.util.List;
@@ -103,17 +105,19 @@ public class SubUI extends JFrame {
 
 	public SubUI(Object value,int a) {
 		DB db = DB.sharedInstance();
+		TotalDAO td = new TotalDAO();
+		ManagerDAO md = new ManagerDAO();
 		String name = null;
 		String phone = null;
-		List<Total_Beans> nb = db.getNailList(value,a);
+		List<TotalDTO> nb = td.getNailList(value,a);
 		int r = nb.size();
 		int i = 0;
 		Object[][] obj = null;
 		String[] str = null;
 		
 		if(nb.size() == 0) {
-			List<Customer_Beans> cb = db.searchList(value);
-			for (Customer_Beans beans : cb) {
+			List<CustomerDTO> cb = md.searchList(value);
+			for (CustomerDTO beans : cb) {
 				name = beans.getName();
 				phone = beans.getPhone();
 			}
@@ -121,7 +125,7 @@ public class SubUI extends JFrame {
 		if(a == 1) {
 			str = new String[] { "\uB0A0\uC9DC", "\uB0B4\uC6A9", "\uAE08\uC561", "\uC794\uC561" };
 			obj = new Object[r][4];
-			for (Total_Beans beans : nb) {
+			for (TotalDTO beans : nb) {
 				name = beans.getName();
 				phone = beans.getPhone();
 				obj[i][0] = beans.getDate();
@@ -133,7 +137,7 @@ public class SubUI extends JFrame {
 		}else if(a == 2) {
 			str = new String[] { "\uB0A0\uC9DC", "\uB0B4\uC6A9", "\uAE08\uC561" };
 			obj = new Object[r][3];
-			for (Total_Beans beans : nb) {
+			for (TotalDTO beans : nb) {
 				name = beans.getName();
 				phone = beans.getPhone();
 				obj[i][0] = beans.getDate();

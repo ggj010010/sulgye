@@ -2,35 +2,32 @@ package minjae.ui;
 
 import java.awt.Component;
 import java.awt.EventQueue;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.List;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 import minjae.dao.DB;
-import minjae.dto.Customer_Beans;
-
-import javax.swing.JButton;
-import javax.swing.LayoutStyle.ComponentPlacement;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import minjae.dao.ManagerDAO;
+import minjae.dto.CustomerDTO;
 
 public class ManagerUI extends JFrame {
 	private JPanel contentPane;
@@ -64,6 +61,7 @@ public class ManagerUI extends JFrame {
 	public ManagerUI() {
 		// DB ¿¬°á
 		DB db = DB.sharedInstance();
+		ManagerDAO md = new ManagerDAO();
 
 		cmb_Search.addItemListener(new ItemListener() {
 
@@ -83,11 +81,11 @@ public class ManagerUI extends JFrame {
 		JScrollPane scrollPane = new JScrollPane();
 
 		// DB db = new DB();
-		List<Customer_Beans> b = db.getList();
+		List<CustomerDTO> b = md.getList();
 		int r = b.size();
 		int i = 0;
 		Object[][] obj = new Object[r][2];
-		for (Customer_Beans beans : b) {
+		for (CustomerDTO beans : b) {
 			obj[i][0] = beans.getName();
 			obj[i][1] = beans.getPhone();
 			i++;
@@ -111,12 +109,12 @@ public class ManagerUI extends JFrame {
 			public void keyReleased(KeyEvent e) {
 				if (cmb_Search.getSelectedItem().toString() == "\uBC88\uD638") {
 
-					List<Customer_Beans> b = db.searchList_P(txtF_Search.getText());
+					List<CustomerDTO> b = md.searchList_P(txtF_Search.getText());
 
 					int r = b.size();
 					int i = 0;
 					Object[][] obj = new Object[r][2];
-					for (Customer_Beans beans : b) {
+					for (CustomerDTO beans : b) {
 						obj[i][0] = beans.getName();
 						obj[i][1] = beans.getPhone();
 						i++;
@@ -131,11 +129,11 @@ public class ManagerUI extends JFrame {
 
 				} else if (cmb_Search.getSelectedItem().toString() == "\uC774\uB984") {
 
-					List<Customer_Beans> b = db.searchList_N(txtF_Search.getText());
+					List<CustomerDTO> b = md.searchList_N(txtF_Search.getText());
 					int r = b.size();
 					int i = 0;
 					Object[][] obj = new Object[r][2];
-					for (Customer_Beans beans : b) {
+					for (CustomerDTO beans : b) {
 						obj[i][0] = beans.getName();
 						obj[i][1] = beans.getPhone();
 						i++;
