@@ -23,6 +23,7 @@ import javax.swing.border.EmptyBorder;
 import com.toedter.calendar.JDateChooser;
 
 import minjae.dao.DB;
+import minjae.dao.ManagerDAO;
 import minjae.dao.scheduleDAO;
 import minjae.dto.CustomerDTO;
 import minjae.dto.scheduleDTO;
@@ -54,9 +55,29 @@ public class SchaduleUI extends JFrame {
 	 * Create the frame.
 	 */
 	public SchaduleUI() {
+		
 		DB db = DB.sharedInstance();
 		scheduleDAO sd = new scheduleDAO();
+		
 		JDateChooser scaduleCalender = new JDateChooser();
+		
+		scaduleCalender.setDate(new Date());
+		scaduleCalender.getDateEditor().addPropertyChangeListener(
+			    new PropertyChangeListener() {
+			        @Override
+			        public void propertyChange(PropertyChangeEvent e) {
+			            if ("date".equals(e.getPropertyName())) {
+			                System.out.println(e.getNewValue());
+			                System.out.println(scaduleCalender.getDate().toString());
+			            }
+			        }
+			    });
+		
+		Date d =(Date) scaduleCalender.getDate();
+		java.sql.Date dd = new java.sql.Date(scaduleCalender.getDate().getTime());
+		System.out.println(dd);
+		SimpleDateFormat sdf= new SimpleDateFormat("yy/MM/dd");
+		String s = sdf.format(d);
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 500, 600);
@@ -70,29 +91,21 @@ public class SchaduleUI extends JFrame {
 		btn_ScaduleAdd.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				int[] columns = table.getSelectedColumns();
+				scheduleDTO sdto = new scheduleDTO();
 				int[] rows = table.getSelectedRows();
-				System.out.println(rows);
-				cellAtt.combine(rows, columns);
-				table.clearSelection();
-				table.revalidate();
-				table.repaint();
+				sdto.setStartIndex(rows[0]);
+				sdto.setEndIndex(rows[rows.length-1]);
+				sdto.setScheDate(dd);
+				new SchaduleInsertUI(sdto);
+				System.out.println(sdto.toString());
+				
+//				System.out.println(rows);
+//				cellAtt.combine(rows, columns);
+//				table.clearSelection();
+//				table.revalidate();
+//				table.repaint();
 			}
 		});
-		
-		
-		
-		scaduleCalender.setDate(new Date());
-		scaduleCalender.getDateEditor().addPropertyChangeListener(
-			    new PropertyChangeListener() {
-			        @Override
-			        public void propertyChange(PropertyChangeEvent e) {
-			            if ("date".equals(e.getPropertyName())) {
-			                System.out.println(e.getNewValue());
-			                System.out.println(scaduleCalender.getDate().toString());
-			            }
-			        }
-			    });
 		
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
@@ -115,8 +128,6 @@ public class SchaduleUI extends JFrame {
 					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 508, GroupLayout.PREFERRED_SIZE)
 					.addContainerGap())
 		);
-		
-		
 		
 		Object[] c = new Object[] {
 				"10:30~11:00",
@@ -157,15 +168,12 @@ public class SchaduleUI extends JFrame {
 		cellAtt = (CellSpan) ml.getCellAttribute();
 		table = new MultiSpanCellTable(ml);
 		
-		Date d =(Date) scaduleCalender.getDate();
-		SimpleDateFormat sdf= new SimpleDateFormat("yy/MM/dd");
-		String s = sdf.format(d);
 		List<scheduleDTO> sd_list = sd.getSchedule(s);
-		
 		for (scheduleDTO beans : sd_list) {
 			int si = beans.getStartIndex();
 			int ei = beans.getEndIndex();
 			int[] rows = new int[ei-si+1];
+			ml.setValueAt(beans.getScheDesc(), si, 1);
 			for(int i = 0;si<ei;i++,si++) {
 				rows[i] = si;
 			}

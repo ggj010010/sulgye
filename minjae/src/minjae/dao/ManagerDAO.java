@@ -73,7 +73,7 @@ public class ManagerDAO extends DB{
 
 	public List<CustomerDTO> searchList_P(String search){
 		List<CustomerDTO> list = null;
-		String sql = "select * from Customer where Phone like '010-'|| ?";
+		String sql = "select * from Customer where Phone like ?";
 		if(connect()) {
 			try {
 				pstmt = conn.prepareStatement(sql);

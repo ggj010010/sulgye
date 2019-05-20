@@ -39,5 +39,27 @@ public class scheduleDAO extends DB{
 		}
 		return list;
 	}
+	
+	public void insertSchedule(scheduleDTO sd){
+		
+		String sql = "insert into schedule values((select nvl(max(scheid)+1,0) from schedule),?,?,?,?,?)";
+		System.out.println(sql);
+		if(connect()) {
+			try {
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setInt(1, sd.getCustID());
+				pstmt.setDate(2, sd.getScheDate());
+				pstmt.setString(3, sd.getScheDesc());
+				pstmt.setInt(4, sd.getStartIndex());
+				pstmt.setInt(5, sd.getEndIndex());
+				pstmt.executeUpdate();
+				
+			}catch(SQLException e) {
+				e.printStackTrace();
+			}finally {
+				close();
+			}
+		}
+	}
 
 }

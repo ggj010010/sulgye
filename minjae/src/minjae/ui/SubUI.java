@@ -33,75 +33,22 @@ public class SubUI extends JFrame {
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					SubUI frame = new SubUI();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+//	public static void main(String[] args) {
+//		EventQueue.invokeLater(new Runnable() {
+//			public void run() {
+//				try {
+//					SubUI frame = new SubUI();
+//					frame.setVisible(true);
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		});
+//	}
 
 	/**
 	 * Create the frame.
 	 */
-	public SubUI() {
-
-		setBounds(100, 100, 1000, 500);
-		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		setContentPane(contentPane);
-
-		JLabel lbl_Name = new JLabel("\uACE0\uAC1D\uB2D8");
-		lbl_Name.setFont(new Font("±¼¸²", Font.PLAIN, 30));
-
-		JLabel lbl_Phone = new JLabel("010-");
-		lbl_Phone.setFont(new Font("±¼¸²", Font.PLAIN, 30));
-
-		JScrollPane scrollPane = new JScrollPane();
-		GroupLayout gl_contentPane = new GroupLayout(contentPane);
-		gl_contentPane.setHorizontalGroup(
-			gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 950, Short.MAX_VALUE)
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGap(6)
-							.addComponent(lbl_Name, GroupLayout.PREFERRED_SIZE, 456, GroupLayout.PREFERRED_SIZE)
-							.addGap(18)
-							.addComponent(lbl_Phone, GroupLayout.DEFAULT_SIZE, 470, Short.MAX_VALUE)))
-					.addContainerGap())
-		);
-		gl_contentPane.setVerticalGroup(
-			gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lbl_Phone, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addComponent(lbl_Name, GroupLayout.DEFAULT_SIZE, 54, Short.MAX_VALUE))
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 369, Short.MAX_VALUE)
-					.addContainerGap())
-		);
-
-		table = new JTable();
-		table.setCellSelectionEnabled(true);
-		table.setModel(new DefaultTableModel(
-				new Object[][] { { null, null, null, null }, { null, null, null, null }, { null, null, null, null }, },
-				new String[] { "\uB0A0\uC9DC", "\uB0B4\uC6A9", "\uAE08\uC561", "\uC794\uC561" }) {
-			public boolean isCellEditable(int row, int column) {
-				return false;
-			};
-		});
-		table.getTableHeader().setReorderingAllowed(false);
-		scrollPane.setViewportView(table);
-		contentPane.setLayout(gl_contentPane);
-		setVisible(true);
-	}
 
 	public SubUI(Object value,int a) {
 		DB db = DB.sharedInstance();
