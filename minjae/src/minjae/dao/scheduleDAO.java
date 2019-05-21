@@ -1,5 +1,6 @@
 package minjae.dao;
 
+import java.sql.Date;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -7,9 +8,9 @@ import java.util.List;
 import minjae.dto.scheduleDTO;
 
 public class scheduleDAO extends DB{
-	public List<scheduleDTO> getSchedule(String date){
+	public List<scheduleDTO> getSchedule(Date date){
 		List<scheduleDTO> list = null;
-		String sql = "select * from SCHEDULE";
+		String sql = "select * from SCHEDULE where schedate = '" + date + "'";
 		System.out.println(sql);
 		if(connect()) {
 			try {
@@ -19,13 +20,11 @@ public class scheduleDAO extends DB{
 					list = new ArrayList<scheduleDTO>();
 					while(rs.next()) {
 						scheduleDTO b = new scheduleDTO();
-						
+
 						b.setScheDesc(rs.getString(4));
 						b.setStartIndex(rs.getInt(5));
 						b.setEndIndex(rs.getInt(6));
-						System.out.println(b.toString());
 						list.add(b);
-						System.out.println(list);
 					}
 				}
 			}catch(SQLException e) {
@@ -39,9 +38,9 @@ public class scheduleDAO extends DB{
 		}
 		return list;
 	}
-	
+
 	public void insertSchedule(scheduleDTO sd){
-		
+
 		String sql = "insert into schedule values((select nvl(max(scheid)+1,0) from schedule),?,?,?,?,?)";
 		System.out.println(sql);
 		if(connect()) {
@@ -53,7 +52,7 @@ public class scheduleDAO extends DB{
 				pstmt.setInt(4, sd.getStartIndex());
 				pstmt.setInt(5, sd.getEndIndex());
 				pstmt.executeUpdate();
-				
+
 			}catch(SQLException e) {
 				e.printStackTrace();
 			}finally {
@@ -61,5 +60,4 @@ public class scheduleDAO extends DB{
 			}
 		}
 	}
-
 }

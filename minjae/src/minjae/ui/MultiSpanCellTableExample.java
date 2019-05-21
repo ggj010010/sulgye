@@ -123,9 +123,6 @@ class AttributiveCellTableModel extends DefaultTableModel {
 	}
 
 	public AttributiveCellTableModel(Vector data, Vector columnNames) {
-		System.out.println(columnNames + "vector");
-		System.out.println(data + "vector");
-		
 		if (data == null) 
 			 throw new IllegalArgumentException("setDataVector() - Null parameter");
 		 dataVector = new Vector(0);
