@@ -2,7 +2,7 @@ package minjae.dto;
 
 import java.sql.Date;
 
-public class scheduleDTO {
+public class ScheduleDTO {
 	int scheID;
 	int custID;
 	Date scheDate;
@@ -29,11 +29,11 @@ public class scheduleDTO {
 		this.phone = phone;
 	}
 
-	public scheduleDTO() {
+	public ScheduleDTO() {
 		
 	}
 	
-	public scheduleDTO(int scheID, int custID, Date scheDate, String scheDesc, int startIndex, int endIndex) {
+	public ScheduleDTO(int scheID, int custID, Date scheDate, String scheDesc, int startIndex, int endIndex) {
 		this.scheID = scheID;
 		this.custID = custID;
 		this.scheDate = scheDate;

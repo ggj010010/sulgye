@@ -25,6 +25,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
+import minjae.dao.CustomerDAO;
 import minjae.dao.DB;
 import minjae.dao.ManagerDAO;
 import minjae.dto.CustomerDTO;
@@ -155,6 +156,13 @@ public class ManagerUI extends JFrame {
 		scrollPane.setViewportView(tbl_Customer);
 
 		JButton btn_Insert = new JButton("\uCD94\uAC00");
+		btn_Insert.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				new CustomerUI(tbl_Customer);
+
+			}
+		});
 
 		JButton btn_Neil = new JButton("\uB124\uC77C");
 		btn_Neil.addMouseListener(new MouseAdapter() {
@@ -179,36 +187,96 @@ public class ManagerUI extends JFrame {
 				new SubUI(value,2);
 			}
 		});
+		
+		JButton btn_Update = new JButton("\uC218\uC815");
+		btn_Update.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				row = tbl_Customer.getSelectedRow();
+				column = tbl_Customer.getSelectedColumn();
+				value = tbl_Customer.getValueAt(row, 1);
+				new CustomerUI(tbl_Customer,value);
+			}
+		});
+		
+		JButton btn_Delete = new JButton("\uC0AD\uC81C");
+		btn_Delete.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				CustomerDAO cd = new CustomerDAO();
+				row = tbl_Customer.getSelectedRow();
+				column = tbl_Customer.getSelectedColumn();
+				value = tbl_Customer.getValueAt(row, 1);
+				cd.customerDelete(value);
+				
+				List<CustomerDTO> b = md.getList();
+				int r = b.size();
+				int i = 0;
+				Object[][] obj = new Object[r][2];
+				for (CustomerDTO beans : b) {
+					obj[i][0] = beans.getName();
+					obj[i][1] = beans.getPhone();
+					i++;
+				}
+
+				tbl_Customer.setCellSelectionEnabled(true);
+				tbl_Customer.setModel(new DefaultTableModel(obj, new String[] { "\uACE0\uAC1D", "\uBC88\uD638" }) {
+					public boolean isCellEditable(int row, int column) {
+						return false;
+					};
+				});
+				tbl_Customer.getTableHeader().setReorderingAllowed(false);
+				tbl_Customer.getColumn("\uACE0\uAC1D").setCellRenderer(new SelectCellRenderer());
+				tbl_Customer.getColumn("\uBC88\uD638").setCellRenderer(new SelectCellRenderer());
+
+			}
+		});
 
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
-		gl_contentPane.setHorizontalGroup(gl_contentPane.createParallelGroup(Alignment.LEADING).addGroup(gl_contentPane
-				.createSequentialGroup()
-				.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_contentPane.createSequentialGroup().addGap(72)
-								.addComponent(cmb_Search, GroupLayout.PREFERRED_SIZE, 103, GroupLayout.PREFERRED_SIZE)
-								.addGap(18)
-								.addComponent(txtF_Search, GroupLayout.PREFERRED_SIZE, 557, GroupLayout.PREFERRED_SIZE)
-								.addGap(18)
-								.addComponent(btn_Neil, GroupLayout.PREFERRED_SIZE, 91, GroupLayout.PREFERRED_SIZE))
-						.addGroup(gl_contentPane.createSequentialGroup().addContainerGap().addComponent(scrollPane,
-								GroupLayout.DEFAULT_SIZE, 847, Short.MAX_VALUE)))
-				.addPreferredGap(ComponentPlacement.UNRELATED)
-				.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
-						.addComponent(btn_Eye, GroupLayout.PREFERRED_SIZE, 91, GroupLayout.PREFERRED_SIZE)
-						.addComponent(btn_Insert, GroupLayout.DEFAULT_SIZE, 91, Short.MAX_VALUE))
-				.addContainerGap()));
-		gl_contentPane.setVerticalGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPane.createSequentialGroup().addGap(1)
-						.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE, false).addComponent(btn_Eye)
-								.addComponent(txtF_Search, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(btn_Neil)
-								.addComponent(cmb_Search, GroupLayout.PREFERRED_SIZE, 22, GroupLayout.PREFERRED_SIZE))
-						.addGap(7)
-						.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
-								.addGroup(gl_contentPane.createSequentialGroup().addComponent(btn_Insert).addGap(405))
-								.addGroup(gl_contentPane.createSequentialGroup()
-										.addComponent(scrollPane, 0, 0, Short.MAX_VALUE).addContainerGap()))));
+		gl_contentPane.setHorizontalGroup(
+			gl_contentPane.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGap(72)
+							.addComponent(cmb_Search, GroupLayout.PREFERRED_SIZE, 103, GroupLayout.PREFERRED_SIZE)
+							.addGap(18)
+							.addComponent(txtF_Search, GroupLayout.PREFERRED_SIZE, 557, GroupLayout.PREFERRED_SIZE)
+							.addGap(18)
+							.addComponent(btn_Neil, GroupLayout.PREFERRED_SIZE, 91, GroupLayout.PREFERRED_SIZE))
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addContainerGap()
+							.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 847, Short.MAX_VALUE)))
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addComponent(btn_Eye, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 91, GroupLayout.PREFERRED_SIZE)
+						.addComponent(btn_Insert, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 91, Short.MAX_VALUE)
+						.addComponent(btn_Update, GroupLayout.PREFERRED_SIZE, 91, GroupLayout.PREFERRED_SIZE)
+						.addComponent(btn_Delete, GroupLayout.PREFERRED_SIZE, 91, GroupLayout.PREFERRED_SIZE))
+					.addContainerGap())
+		);
+		gl_contentPane.setVerticalGroup(
+			gl_contentPane.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addGap(1)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE, false)
+						.addComponent(btn_Eye)
+						.addComponent(txtF_Search, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(btn_Neil)
+						.addComponent(cmb_Search, GroupLayout.PREFERRED_SIZE, 22, GroupLayout.PREFERRED_SIZE))
+					.addGap(7)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addComponent(btn_Insert)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(btn_Update)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(btn_Delete)
+							.addGap(347))
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addComponent(scrollPane, 0, 0, Short.MAX_VALUE)
+							.addContainerGap())))
+		);
 		contentPane.setLayout(gl_contentPane);
 		setVisible(true);
 	}

@@ -18,9 +18,9 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.EmptyBorder;
 
 import minjae.dao.ManagerDAO;
-import minjae.dao.scheduleDAO;
+import minjae.dao.ScheduleDAO;
 import minjae.dto.CustomerDTO;
-import minjae.dto.scheduleDTO;
+import minjae.dto.ScheduleDTO;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -60,7 +60,7 @@ public class SchaduleInsertUI extends JFrame {
 //		
 //	}
 	
-	public SchaduleInsertUI(scheduleDTO sdto) {
+	public SchaduleInsertUI(ScheduleDTO sdto) {
 		ManagerDAO md = new ManagerDAO();
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -127,7 +127,7 @@ public class SchaduleInsertUI extends JFrame {
 		btn_Save.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				scheduleDAO sd = new scheduleDAO();
+				ScheduleDAO sd = new ScheduleDAO();
 				sdto.setScheDesc(txtF_Desc.getText());
 				System.out.println(sdto.toString());
 				sd.insertSchedule(sdto);

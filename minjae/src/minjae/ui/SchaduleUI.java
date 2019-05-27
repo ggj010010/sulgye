@@ -24,9 +24,9 @@ import com.toedter.calendar.JDateChooser;
 
 import minjae.dao.DB;
 import minjae.dao.ManagerDAO;
-import minjae.dao.scheduleDAO;
+import minjae.dao.ScheduleDAO;
 import minjae.dto.CustomerDTO;
-import minjae.dto.scheduleDTO;
+import minjae.dto.ScheduleDTO;
 
 public class SchaduleUI extends JFrame {
 
@@ -58,7 +58,7 @@ public class SchaduleUI extends JFrame {
 	public SchaduleUI() {
 		
 		DB db = DB.sharedInstance();
-		scheduleDAO sd = new scheduleDAO();
+		ScheduleDAO sd = new ScheduleDAO();
 		
 		Object[] c = new Object[] {
 				"10:30~11:00",
@@ -120,8 +120,8 @@ public class SchaduleUI extends JFrame {
 			        		cellAtt = (CellSpan) ml.getCellAttribute();
 			        		table.setModel(ml);
 			        		
-			        		List<scheduleDTO> sd_list = sd.getSchedule(dd);
-			        		for (scheduleDTO beans : sd_list) {
+			        		List<ScheduleDTO> sd_list = sd.getSchedule(dd);
+			        		for (ScheduleDTO beans : sd_list) {
 			        			int si = beans.getStartIndex();
 			        			int ei = beans.getEndIndex();
 			        			int[] rows = new int[ei-si+1];
@@ -168,7 +168,7 @@ public class SchaduleUI extends JFrame {
 		btn_ScaduleAdd.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				scheduleDTO sdto = new scheduleDTO();
+				ScheduleDTO sdto = new ScheduleDTO();
 				int[] rows = table.getSelectedRows();
 				sdto.setStartIndex(rows[0]);
 				sdto.setEndIndex(rows[rows.length-1]);
@@ -211,8 +211,8 @@ public class SchaduleUI extends JFrame {
 		
 
 		
-		List<scheduleDTO> sd_list = sd.getSchedule(dd);
-		for (scheduleDTO beans : sd_list) {
+		List<ScheduleDTO> sd_list = sd.getSchedule(dd);
+		for (ScheduleDTO beans : sd_list) {
 			int si = beans.getStartIndex();
 			int ei = beans.getEndIndex();
 			int[] rows = new int[ei-si+1];
@@ -237,10 +237,10 @@ public class SchaduleUI extends JFrame {
 		scrollPane.setViewportView(table);
 		contentPane.setLayout(gl_contentPane);
 	}
-	public SchaduleUI(scheduleDTO sdto) {
+	public SchaduleUI(ScheduleDTO sdto) {
 		
 		DB db = DB.sharedInstance();
-		scheduleDAO sd = new scheduleDAO();
+		ScheduleDAO sd = new ScheduleDAO();
 		
 		Object[] c = new Object[] {
 				"10:30~11:00",
@@ -302,8 +302,8 @@ public class SchaduleUI extends JFrame {
 				        		cellAtt = (CellSpan) ml.getCellAttribute();
 				        		table.setModel(ml);
 				        		
-				        		List<scheduleDTO> sd_list = sd.getSchedule(dd);
-				        		for (scheduleDTO beans : sd_list) {
+				        		List<ScheduleDTO> sd_list = sd.getSchedule(dd);
+				        		for (ScheduleDTO beans : sd_list) {
 				        			int si = beans.getStartIndex();
 				        			int ei = beans.getEndIndex();
 				        			int[] rows = new int[ei-si+1];
@@ -350,7 +350,7 @@ public class SchaduleUI extends JFrame {
 		btn_ScaduleAdd.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				scheduleDTO sdto = new scheduleDTO();
+				ScheduleDTO sdto = new ScheduleDTO();
 				int[] rows = table.getSelectedRows();
 				sdto.setStartIndex(rows[0]);
 				sdto.setEndIndex(rows[rows.length-1]);
@@ -389,8 +389,8 @@ public class SchaduleUI extends JFrame {
 						.addContainerGap())
 				);
 		
-		List<scheduleDTO> sd_list = sd.getSchedule(dd);
-		for (scheduleDTO beans : sd_list) {
+		List<ScheduleDTO> sd_list = sd.getSchedule(dd);
+		for (ScheduleDTO beans : sd_list) {
 			int si = beans.getStartIndex();
 			int ei = beans.getEndIndex();
 			int[] rows = new int[ei-si+1];

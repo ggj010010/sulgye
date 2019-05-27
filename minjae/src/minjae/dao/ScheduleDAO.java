@@ -5,11 +5,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import minjae.dto.scheduleDTO;
+import minjae.dto.ScheduleDTO;
 
-public class scheduleDAO extends DB{
-	public List<scheduleDTO> getSchedule(Date date){
-		List<scheduleDTO> list = null;
+public class ScheduleDAO extends DB{
+	public List<ScheduleDTO> getSchedule(Date date){
+		List<ScheduleDTO> list = null;
 		String sql = "select * from SCHEDULE where schedate = '" + date + "'";
 		System.out.println(sql);
 		if(connect()) {
@@ -17,9 +17,9 @@ public class scheduleDAO extends DB{
 				stmt = conn.createStatement();
 				if(stmt !=null) {
 					rs = stmt.executeQuery(sql);
-					list = new ArrayList<scheduleDTO>();
+					list = new ArrayList<ScheduleDTO>();
 					while(rs.next()) {
-						scheduleDTO b = new scheduleDTO();
+						ScheduleDTO b = new ScheduleDTO();
 
 						b.setScheDesc(rs.getString(4));
 						b.setStartIndex(rs.getInt(5));
@@ -39,7 +39,7 @@ public class scheduleDAO extends DB{
 		return list;
 	}
 
-	public void insertSchedule(scheduleDTO sd){
+	public void insertSchedule(ScheduleDTO sd){
 
 		String sql = "insert into schedule values((select nvl(max(scheid)+1,0) from schedule),?,?,?,?,?)";
 		System.out.println(sql);
