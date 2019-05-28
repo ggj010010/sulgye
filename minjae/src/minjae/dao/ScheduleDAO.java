@@ -20,7 +20,7 @@ public class ScheduleDAO extends DB{
 					list = new ArrayList<ScheduleDTO>();
 					while(rs.next()) {
 						ScheduleDTO b = new ScheduleDTO();
-
+						b.setCustID(rs.getInt(2));
 						b.setScheDesc(rs.getString(4));
 						b.setStartIndex(rs.getInt(5));
 						b.setEndIndex(rs.getInt(6));
@@ -58,6 +58,25 @@ public class ScheduleDAO extends DB{
 			}finally {
 				close();
 			}
+		}
+	}
+	
+	public void scheduleDelete(Object search,Date date) {
+		String sql = "delete from SCHEDULE where schedate = '" + date + "' and custid = " + search;
+		System.out.println(sql);
+		if(connect()) {
+			try {
+				stmt = conn.createStatement();
+				stmt.executeUpdate(sql);
+				
+			}catch(SQLException e) {
+				e.printStackTrace();
+			}finally {
+				close();
+			}
+		}else {
+			System.out.println("데이터 베이스 연결 실패");
+			System.exit(0);
 		}
 	}
 }

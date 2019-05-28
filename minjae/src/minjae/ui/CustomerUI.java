@@ -56,7 +56,7 @@ public class CustomerUI extends JFrame {
 		DB db = DB.sharedInstance();
 		CustomerDAO cd = new CustomerDAO();
 		
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 350, 200);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -70,17 +70,17 @@ public class CustomerUI extends JFrame {
 		txtF_Name.setColumns(10);
 		
 		txtF_Phone1 = new JTextField();
-		txtF_Phone1.setColumns(10);
+		txtF_Phone1.setColumns(3);
 		
 		JLabel lblNewLabel = new JLabel("-");
 		
 		txtF_Phone2 = new JTextField();
-		txtF_Phone2.setColumns(10);
+		txtF_Phone2.setColumns(4);
 		
 		JLabel label = new JLabel("-");
 		
 		txtF_Phone3 = new JTextField();
-		txtF_Phone3.setColumns(10);
+		txtF_Phone3.setColumns(4);
 		
 		JButton btn_Save = new JButton("\uD655\uC778");
 		btn_Save.addMouseListener(new MouseAdapter() {
@@ -161,7 +161,7 @@ public class CustomerUI extends JFrame {
 		DB db = DB.sharedInstance();
 		CustomerDAO cd = new CustomerDAO();
 		
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 350, 200);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -175,17 +175,17 @@ public class CustomerUI extends JFrame {
 		txtF_Name.setColumns(10);
 		
 		txtF_Phone1 = new JTextField();
-		txtF_Phone1.setColumns(10);
+		txtF_Phone1.setColumns(3);
 		
 		JLabel lblNewLabel = new JLabel("-");
 		
 		txtF_Phone2 = new JTextField();
-		txtF_Phone2.setColumns(10);
+		txtF_Phone2.setColumns(4);
 		
 		JLabel label = new JLabel("-");
 		
 		txtF_Phone3 = new JTextField();
-		txtF_Phone3.setColumns(10);
+		txtF_Phone3.setColumns(4);
 		
 		JButton btn_Save = new JButton("\uD655\uC778");
 		btn_Save.addMouseListener(new MouseAdapter() {
@@ -288,7 +288,7 @@ public class CustomerUI extends JFrame {
 		ManagerDAO md = new ManagerDAO();
 		CustomerDAO cd = new CustomerDAO();
 		
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 350, 200);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -302,17 +302,17 @@ public class CustomerUI extends JFrame {
 		txtF_Name.setColumns(10);
 		
 		txtF_Phone1 = new JTextField();
-		txtF_Phone1.setColumns(10);
+		txtF_Phone1.setColumns(3);
 		
 		JLabel lblNewLabel = new JLabel("-");
 		
 		txtF_Phone2 = new JTextField();
-		txtF_Phone2.setColumns(10);
+		txtF_Phone2.setColumns(4);
 		
 		JLabel label = new JLabel("-");
 		
 		txtF_Phone3 = new JTextField();
-		txtF_Phone3.setColumns(10);
+		txtF_Phone3.setColumns(4);
 		
 		List<CustomerDTO> cb = md.searchList(value);
 		for (CustomerDTO beans : cb) {

@@ -22,6 +22,7 @@ import javax.swing.border.EmptyBorder;
 
 import com.toedter.calendar.JDateChooser;
 
+import minjae.dao.CustomerDAO;
 import minjae.dao.DB;
 import minjae.dao.ManagerDAO;
 import minjae.dao.ScheduleDAO;
@@ -121,11 +122,16 @@ public class SchaduleUI extends JFrame {
 			        		table.setModel(ml);
 			        		
 			        		List<ScheduleDTO> sd_list = sd.getSchedule(dd);
+			        		CustomerDAO cd = new CustomerDAO();
+			        		List<CustomerDTO> cd_list;
 			        		for (ScheduleDTO beans : sd_list) {
 			        			int si = beans.getStartIndex();
 			        			int ei = beans.getEndIndex();
 			        			int[] rows = new int[ei-si+1];
-			        			ml.setValueAt(beans.getScheDesc(), si, 1);
+			        			cd_list = cd.customerSelect(beans.getCustID());
+			        			for (CustomerDTO cdto : cd_list) {
+			        				ml.setValueAt(cdto.getName()+" : "+cdto.getPhone()+" :::: "+beans.getScheDesc(), si, 1);
+			        			}
 			        			for(int i = 0;si<ei;i++,si++) {
 			        				rows[i] = si;
 			        			}
@@ -186,37 +192,73 @@ public class SchaduleUI extends JFrame {
 			}
 		});
 		
+		JButton btn_ScaduleUpdate = new JButton("\uC218\uC815");
+		btn_ScaduleUpdate.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				ManagerDAO md = new ManagerDAO();
+				int custid = 0;
+				int column = table.getSelectedColumn();
+				int row = table.getSelectedRow();
+				System.out.println(table.getValueAt(row, column).toString().split(" ",5)[0]);
+				System.out.println(table.getValueAt(row, column).toString().split(" ",5)[2]);
+				System.out.println(table.getValueAt(row, column).toString().split(" ",5)[4]);
+				List<CustomerDTO> cdto = md.searchList(table.getValueAt(row, column).toString().split(" ",5)[2]);
+				for(CustomerDTO beans : cdto) {
+					custid = beans.getNo();
+				}
+				sd.scheduleDelete(custid, dd);
+				
+				table.setValueAt("", row, column);
+				cellAtt.split(row, column);
+				table.clearSelection();
+				table.revalidate();
+				table.repaint();
+			}
+		});
+		
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
 			gl_contentPane.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_contentPane.createSequentialGroup()
-					.addContainerGap()
-					.addComponent(scaduleCalender, GroupLayout.PREFERRED_SIZE, 202, GroupLayout.PREFERRED_SIZE)
-					.addGap(164)
-					.addComponent(btn_ScaduleAdd, GroupLayout.PREFERRED_SIZE, 84, GroupLayout.PREFERRED_SIZE)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addGroup(Alignment.TRAILING, gl_contentPane.createSequentialGroup()
+							.addContainerGap()
+							.addComponent(scaduleCalender, GroupLayout.PREFERRED_SIZE, 202, GroupLayout.PREFERRED_SIZE)
+							.addGap(73)
+							.addComponent(btn_ScaduleUpdate, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(btn_ScaduleAdd, GroupLayout.PREFERRED_SIZE, 84, GroupLayout.PREFERRED_SIZE))
+						.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 462, Short.MAX_VALUE))
 					.addContainerGap())
-				.addComponent(scrollPane, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 474, Short.MAX_VALUE)
 		);
 		gl_contentPane.setVerticalGroup(
-			gl_contentPane.createParallelGroup(Alignment.TRAILING)
-				.addGroup(Alignment.LEADING, gl_contentPane.createSequentialGroup()
+			gl_contentPane.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_contentPane.createSequentialGroup()
 					.addContainerGap()
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
-						.addComponent(btn_ScaduleAdd)
+						.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+							.addComponent(btn_ScaduleAdd)
+							.addComponent(btn_ScaduleUpdate))
 						.addComponent(scaduleCalender, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 					.addGap(18)
-					.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 550, Short.MAX_VALUE)
+					.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 540, Short.MAX_VALUE)
 					.addContainerGap())
 		);
 		
 
 		
 		List<ScheduleDTO> sd_list = sd.getSchedule(dd);
+		CustomerDAO cd = new CustomerDAO();
+		List<CustomerDTO> cd_list;
 		for (ScheduleDTO beans : sd_list) {
 			int si = beans.getStartIndex();
 			int ei = beans.getEndIndex();
 			int[] rows = new int[ei-si+1];
-			ml.setValueAt(beans.getScheDesc(), si, 1);
+			cd_list = cd.customerSelect(beans.getCustID());
+			for (CustomerDTO cdto : cd_list) {
+				ml.setValueAt(cdto.getName()+" : "+cdto.getPhone()+" :::: "+beans.getScheDesc(), si, 1);
+			}
 			for(int i = 0;si<ei;i++,si++) {
 				rows[i] = si;
 			}
@@ -237,6 +279,7 @@ public class SchaduleUI extends JFrame {
 		scrollPane.setViewportView(table);
 		contentPane.setLayout(gl_contentPane);
 	}
+	
 	public SchaduleUI(ScheduleDTO sdto) {
 		
 		DB db = DB.sharedInstance();
@@ -303,11 +346,16 @@ public class SchaduleUI extends JFrame {
 				        		table.setModel(ml);
 				        		
 				        		List<ScheduleDTO> sd_list = sd.getSchedule(dd);
+				        		CustomerDAO cd = new CustomerDAO();
+				        		List<CustomerDTO> cd_list;
 				        		for (ScheduleDTO beans : sd_list) {
 				        			int si = beans.getStartIndex();
 				        			int ei = beans.getEndIndex();
 				        			int[] rows = new int[ei-si+1];
-				        			ml.setValueAt(beans.getScheDesc(), si, 1);
+				        			cd_list = cd.customerSelect(beans.getCustID());
+				        			for (CustomerDTO cdto : cd_list) {
+				        				ml.setValueAt(cdto.getName()+" : "+cdto.getPhone()+" :::: "+beans.getScheDesc(), si, 1);
+				        			}
 				        			for(int i = 0;si<ei;i++,si++) {
 				        				rows[i] = si;
 				        			}
@@ -367,34 +415,62 @@ public class SchaduleUI extends JFrame {
 			}
 		});
 		
+		JButton btn_ScaduleUpdate = new JButton("\uC218\uC815");
+		btn_ScaduleUpdate.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				int column = table.getSelectedColumn();
+				int row = table.getSelectedRow();
+				System.out.println(table.getValueAt(row, column).toString().split(" : "));
+				
+				table.setValueAt("", row, column);
+				cellAtt.split(row, column);
+				table.clearSelection();
+				table.revalidate();
+				table.repaint();
+			}
+		});
+		
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
-				gl_contentPane.createParallelGroup(Alignment.TRAILING)
+			gl_contentPane.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_contentPane.createSequentialGroup()
-						.addContainerGap()
-						.addComponent(scaduleCalender, GroupLayout.PREFERRED_SIZE, 202, GroupLayout.PREFERRED_SIZE)
-						.addGap(164)
-						.addComponent(btn_ScaduleAdd, GroupLayout.PREFERRED_SIZE, 84, GroupLayout.PREFERRED_SIZE)
-						.addContainerGap())
-				.addComponent(scrollPane, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 474, Short.MAX_VALUE)
-				);
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addGroup(Alignment.TRAILING, gl_contentPane.createSequentialGroup()
+							.addContainerGap()
+							.addComponent(scaduleCalender, GroupLayout.PREFERRED_SIZE, 202, GroupLayout.PREFERRED_SIZE)
+							.addGap(73)
+							.addComponent(btn_ScaduleUpdate, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(btn_ScaduleAdd, GroupLayout.PREFERRED_SIZE, 84, GroupLayout.PREFERRED_SIZE))
+						.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 462, Short.MAX_VALUE))
+					.addContainerGap())
+		);
 		gl_contentPane.setVerticalGroup(
-				gl_contentPane.createParallelGroup(Alignment.TRAILING)
+			gl_contentPane.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_contentPane.createSequentialGroup()
-						.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
-								.addComponent(btn_ScaduleAdd, GroupLayout.DEFAULT_SIZE, 23, Short.MAX_VALUE)
-								.addComponent(scaduleCalender, GroupLayout.PREFERRED_SIZE, 23, Short.MAX_VALUE))
-						.addPreferredGap(ComponentPlacement.UNRELATED)
-						.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 508, GroupLayout.PREFERRED_SIZE)
-						.addContainerGap())
-				);
+					.addContainerGap()
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
+						.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+							.addComponent(btn_ScaduleAdd)
+							.addComponent(btn_ScaduleUpdate))
+						.addComponent(scaduleCalender, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addGap(18)
+					.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 540, Short.MAX_VALUE)
+					.addContainerGap())
+		);
 		
 		List<ScheduleDTO> sd_list = sd.getSchedule(dd);
+		CustomerDAO cd = new CustomerDAO();
+		List<CustomerDTO> cd_list;
 		for (ScheduleDTO beans : sd_list) {
 			int si = beans.getStartIndex();
 			int ei = beans.getEndIndex();
 			int[] rows = new int[ei-si+1];
-			ml.setValueAt(beans.getScheDesc(), si, 1);
+			cd_list = cd.customerSelect(beans.getCustID());
+			for (CustomerDTO cdto : cd_list) {
+				ml.setValueAt(cdto.getName()+" : "+cdto.getPhone()+" :::: "+beans.getScheDesc(), si, 1);
+			}
 			for(int i = 0;si<ei;i++,si++) {
 				rows[i] = si;
 			}
@@ -416,5 +492,4 @@ public class SchaduleUI extends JFrame {
 		contentPane.setLayout(gl_contentPane);
 		setVisible(true);
 	}
-	
 }

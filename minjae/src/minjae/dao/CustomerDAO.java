@@ -1,10 +1,43 @@
 package minjae.dao;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import minjae.dto.CustomerDTO;
 
 public class CustomerDAO extends DB{
+	
+	public List<CustomerDTO> customerSelect(int custid){
+		List<CustomerDTO> list = null;
+		String sql = "select * from Customer where custid = " + custid ;
+		if(connect()) {
+			try {
+				stmt = conn.createStatement();
+				if(stmt !=null) {
+					rs = stmt.executeQuery(sql);
+					list = new ArrayList<CustomerDTO>();
+
+					while(rs.next()) {
+						CustomerDTO b = new CustomerDTO();
+
+						b.setNo(rs.getInt(1));
+						b.setName(rs.getString(2));
+						b.setPhone(rs.getString(3));
+						list.add(b);
+					}
+				}
+			}catch(SQLException e) {
+				e.printStackTrace();
+			}finally {
+				close();
+			}
+		}else {
+			System.out.println("데이터 베이스 연결 실패");
+			System.exit(0);
+		}
+		return list;
+	}
 	
 	public void customerInsert(CustomerDTO cd){
 		String sql = "insert into Customer values((select nvl(max(custid)+1,0) from Customer),?,?,FN_GET_DIV_KO_CHAR(?))";
