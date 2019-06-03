@@ -25,6 +25,7 @@ public class ScheduleDAO extends DB{
 						b.setScheDesc(rs.getString(4));
 						b.setStartIndex(rs.getInt(5));
 						b.setEndIndex(rs.getInt(6));
+						b.setPayhow(rs.getInt(7));
 						list.add(b);
 					}
 				}
@@ -42,7 +43,7 @@ public class ScheduleDAO extends DB{
 	
 	public List<ScheduleDTO> selectSchedule(Object search,Date date){
 		List<ScheduleDTO> list = null;
-		String sql = "select name,phone,schedate,schedesc,startindex,endindex,scheID"
+		String sql = "select name,phone,schedate,schedesc,startindex,endindex,scheID,schedule.custid"
 				+ " from SCHEDULE,customer where schedate = '" + date
 				+ "' and customer.custid = " + search
 				+ " and schedule.custid = " + search;
@@ -62,6 +63,7 @@ public class ScheduleDAO extends DB{
 						b.setStartIndex(rs.getInt(5));
 						b.setEndIndex(rs.getInt(6));
 						b.setScheID(rs.getInt(7));
+						b.setCustID(rs.getInt(8));
 						list.add(b);
 					}
 				}
@@ -79,7 +81,7 @@ public class ScheduleDAO extends DB{
 
 	public void insertSchedule(ScheduleDTO sd){
 
-		String sql = "insert into schedule values((select nvl(max(scheid)+1,0) from schedule),?,?,?,?,?)";
+		String sql = "insert into schedule values((select nvl(max(scheid)+1,0) from schedule),?,?,?,?,?,?)";
 		System.out.println(sql);
 		if(connect()) {
 			try {
@@ -89,6 +91,7 @@ public class ScheduleDAO extends DB{
 				pstmt.setString(3, sd.getScheDesc());
 				pstmt.setInt(4, sd.getStartIndex());
 				pstmt.setInt(5, sd.getEndIndex());
+				pstmt.setInt(6, sd.getPayhow());
 				pstmt.executeUpdate();
 
 			}catch(SQLException e) {
@@ -117,6 +120,28 @@ public class ScheduleDAO extends DB{
 				pstmt.setInt(5, sd.getScheID());
 				pstmt.executeUpdate();
 
+			}catch(SQLException e) {
+				e.printStackTrace();
+			}finally {
+				close();
+			}
+		}else {
+			System.out.println("데이터 베이스 연결 실패");
+			System.exit(0);
+		}
+	}
+	public void updatePayhow(ScheduleDTO sd){
+		String sql = "update schedule "
+				+ "set payhow = ? "
+				+ "where scheid = ?";
+		System.out.println(sql);
+		if(connect()) {
+			try {
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setInt(1, sd.getPayhow());
+				pstmt.setInt(2, sd.getScheID());
+				pstmt.executeUpdate();
+				
 			}catch(SQLException e) {
 				e.printStackTrace();
 			}finally {

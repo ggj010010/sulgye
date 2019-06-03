@@ -51,6 +51,7 @@ public class SubUI extends JFrame {
 	 */
 
 	public SubUI(Object value,int a) {
+		System.out.println(value.toString() +":::" +a);
 		DB db = DB.sharedInstance();
 		TotalDAO td = new TotalDAO();
 		ManagerDAO md = new ManagerDAO();
@@ -72,14 +73,16 @@ public class SubUI extends JFrame {
 		if(a == 1) {
 			str = new String[] { "\uB0A0\uC9DC", "\uB0B4\uC6A9", "\uAE08\uC561", "\uC794\uC561" };
 			obj = new Object[r][4];
+			System.out.println("size"+nb.size());
 			for (TotalDTO beans : nb) {
 				name = beans.getName();
 				phone = beans.getPhone();
-				obj[i][0] = beans.getDate();
+				obj[i][0] = beans.getTotal_Date();
 				obj[i][1] = beans.getDesc();
 				obj[i][2] = beans.getMoney();
 				obj[i][3] = beans.getChange();
 				i++;
+				System.out.println("asd"+beans.toString());
 			}
 		}else if(a == 2) {
 			str = new String[] { "\uB0A0\uC9DC", "\uB0B4\uC6A9", "\uAE08\uC561" };
@@ -87,7 +90,7 @@ public class SubUI extends JFrame {
 			for (TotalDTO beans : nb) {
 				name = beans.getName();
 				phone = beans.getPhone();
-				obj[i][0] = beans.getDate();
+				obj[i][0] = beans.getTotal_Date();
 				obj[i][1] = beans.getDesc();
 				obj[i][2] = beans.getMoney();
 				i++;

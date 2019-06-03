@@ -26,8 +26,13 @@ import minjae.dao.CustomerDAO;
 import minjae.dao.DB;
 import minjae.dao.ManagerDAO;
 import minjae.dao.ScheduleDAO;
+import minjae.dao.TotalDAO;
 import minjae.dto.CustomerDTO;
 import minjae.dto.ScheduleDTO;
+import minjae.dto.TotalDTO;
+
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class SchaduleUI extends JFrame {
 
@@ -117,7 +122,9 @@ public class SchaduleUI extends JFrame {
 								rowData2.addElement(rowData);
 							}
 
-							AttributiveCellTableModel ml = new AttributiveCellTableModel(rowData2,dataColumnName);
+							AttributiveCellTableModel ml = new AttributiveCellTableModel(rowData2,dataColumnName){
+								public boolean isCellEditable(int row,int column) {return false;}
+								};
 							cellAtt = (CellSpan) ml.getCellAttribute();
 							table.setModel(ml);
 
@@ -131,17 +138,20 @@ public class SchaduleUI extends JFrame {
 								cd_list = cd.customerSelect(beans.getCustID());
 								for (CustomerDTO cdto : cd_list) {
 									ml.setValueAt(cdto.getName()+" : "+cdto.getPhone()+" :::: "+beans.getScheDesc(), si, 1);
+									
 								}
 								for(int i = 0;si<ei;i++,si++) {
 									rows[i] = si;
 								}
 								int[] columns = {1};
 								cellAtt.combine(rows, columns);
+								
 								table.clearSelection();
 								table.revalidate();
 								table.repaint();
 							}
-
+							
+							;
 							table.setColumnSelectionAllowed(true);
 							table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 							table.setRowHeight(25);
@@ -187,7 +197,7 @@ public class SchaduleUI extends JFrame {
 				//				table.clearSelection();
 				//				table.revalidate();
 				//				table.repaint();
-				setVisible(false);
+				dispose();
 
 			}
 		});
@@ -211,7 +221,7 @@ public class SchaduleUI extends JFrame {
 				for(ScheduleDTO sdto : sd_list) {
 					new ScaduleUpdateUI(sdto);
 				}
-				setVisible(false);				
+				dispose();			
 			}
 		});
 
@@ -245,6 +255,30 @@ public class SchaduleUI extends JFrame {
 		btn_ScadulePay.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				ManagerDAO md = new ManagerDAO();
+				TotalDAO td = new TotalDAO();
+				int custid = 0;
+				int column = table.getSelectedColumn();
+				int row = table.getSelectedRow();
+				int change = 0;
+				System.out.println(table.getValueAt(row, column).toString().split(" ",5)[0]);
+				System.out.println(table.getValueAt(row, column).toString().split(" ",5)[2]);
+				System.out.println(table.getValueAt(row, column).toString().split(" ",5)[4]);
+				List<CustomerDTO> cdto = md.searchList(table.getValueAt(row, column).toString().split(" ",5)[2]);
+				for(CustomerDTO beans : cdto) {
+					custid = beans.getNo();
+					
+				}
+				List<TotalDTO> td_list = td.selectTotal_change(custid);
+				System.out.println("tdlist"+td_list.size());
+				for(TotalDTO tdto : td_list) {
+					change = tdto.getChange();
+				}
+				List<ScheduleDTO> sd_list = sd.selectSchedule(custid, dd);
+				for(ScheduleDTO sdto : sd_list) {;
+					new PaymentUI(sdto,change);
+					dispose();
+				}
 			}
 		});
 
@@ -254,22 +288,22 @@ public class SchaduleUI extends JFrame {
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_contentPane.createSequentialGroup()
-							.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 453, Short.MAX_VALUE)
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING, false)
-								.addGroup(Alignment.LEADING, gl_contentPane.createSequentialGroup()
+							.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 449, Short.MAX_VALUE)
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
+								.addGroup(gl_contentPane.createSequentialGroup()
 									.addPreferredGap(ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
 									.addComponent(btn_ScaduleAdd, GroupLayout.PREFERRED_SIZE, 92, GroupLayout.PREFERRED_SIZE))
-								.addGroup(Alignment.LEADING, gl_contentPane.createSequentialGroup()
+								.addGroup(gl_contentPane.createSequentialGroup()
+									.addPreferredGap(ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
+									.addComponent(btn_ScaduleUpdate, GroupLayout.PREFERRED_SIZE, 91, GroupLayout.PREFERRED_SIZE))
+								.addGroup(gl_contentPane.createSequentialGroup()
 									.addGap(18)
 									.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 										.addComponent(btn_ScadulePay, GroupLayout.PREFERRED_SIZE, 91, GroupLayout.PREFERRED_SIZE)
-										.addComponent(btn_ScaduleDelete, GroupLayout.PREFERRED_SIZE, 91, GroupLayout.PREFERRED_SIZE)))
-								.addGroup(gl_contentPane.createSequentialGroup()
-									.addPreferredGap(ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
-									.addComponent(btn_ScaduleUpdate, GroupLayout.PREFERRED_SIZE, 91, GroupLayout.PREFERRED_SIZE))))
+										.addComponent(btn_ScaduleDelete, GroupLayout.PREFERRED_SIZE, 91, GroupLayout.PREFERRED_SIZE)))))
 						.addGroup(gl_contentPane.createSequentialGroup()
 							.addGap(12)
-							.addComponent(scaduleCalender, GroupLayout.DEFAULT_SIZE, 420, Short.MAX_VALUE)
+							.addComponent(scaduleCalender, GroupLayout.DEFAULT_SIZE, 416, Short.MAX_VALUE)
 							.addGap(130)))
 					.addContainerGap())
 		);
@@ -280,7 +314,7 @@ public class SchaduleUI extends JFrame {
 					.addComponent(scaduleCalender, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 					.addGap(18)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-						.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 540, Short.MAX_VALUE)
+						.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 548, Short.MAX_VALUE)
 						.addGroup(gl_contentPane.createSequentialGroup()
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addComponent(btn_ScaduleAdd)
@@ -289,7 +323,7 @@ public class SchaduleUI extends JFrame {
 							.addGap(32)
 							.addComponent(btn_ScaduleDelete)
 							.addGap(41)
-							.addComponent(btn_ScadulePay, GroupLayout.PREFERRED_SIZE, 365, GroupLayout.PREFERRED_SIZE)))
+							.addComponent(btn_ScadulePay, GroupLayout.PREFERRED_SIZE, 353, GroupLayout.PREFERRED_SIZE)))
 					.addContainerGap())
 		);
 
@@ -325,6 +359,7 @@ public class SchaduleUI extends JFrame {
 
 		scrollPane.setViewportView(table);
 		contentPane.setLayout(gl_contentPane);
+		setVisible(true);
 	}
 
 	public SchaduleUI(ScheduleDTO sdto) {
@@ -458,7 +493,7 @@ public class SchaduleUI extends JFrame {
 				//				table.clearSelection();
 				//				table.revalidate();
 				//				table.repaint();
-				setVisible(false);
+				dispose();
 			}
 		});
 
@@ -478,7 +513,7 @@ public class SchaduleUI extends JFrame {
 
 //				new SchaduleInsertUI(sdto);
 				System.out.println(sdto.toString());
-				setVisible(false);
+				dispose();
 			}
 		});
 
@@ -512,6 +547,30 @@ public class SchaduleUI extends JFrame {
 		btn_ScadulePay.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				ManagerDAO md = new ManagerDAO();
+				TotalDAO td = new TotalDAO();
+				int custid = 0;
+				int column = table.getSelectedColumn();
+				int row = table.getSelectedRow();
+				int change = 0;
+				System.out.println(table.getValueAt(row, column).toString().split(" ",5)[0]);
+				System.out.println(table.getValueAt(row, column).toString().split(" ",5)[2]);
+				System.out.println(table.getValueAt(row, column).toString().split(" ",5)[4]);
+				List<CustomerDTO> cdto = md.searchList(table.getValueAt(row, column).toString().split(" ",5)[2]);
+				for(CustomerDTO beans : cdto) {
+					custid = beans.getNo();
+					
+				}
+				List<TotalDTO> td_list = td.selectTotal_change(custid);
+				System.out.println("tdlist"+td_list.size());
+				for(TotalDTO tdto : td_list) {
+					change = tdto.getChange();
+				}
+				List<ScheduleDTO> sd_list = sd.selectSchedule(custid, dd);
+				for(ScheduleDTO sdto : sd_list) {;
+					new PaymentUI(sdto,change);
+					dispose();
+				}
 			}
 		});
 
@@ -521,22 +580,22 @@ public class SchaduleUI extends JFrame {
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_contentPane.createSequentialGroup()
-							.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 453, Short.MAX_VALUE)
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING, false)
-								.addGroup(Alignment.LEADING, gl_contentPane.createSequentialGroup()
+							.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 449, Short.MAX_VALUE)
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
+								.addGroup(gl_contentPane.createSequentialGroup()
 									.addPreferredGap(ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
 									.addComponent(btn_ScaduleAdd, GroupLayout.PREFERRED_SIZE, 92, GroupLayout.PREFERRED_SIZE))
-								.addGroup(Alignment.LEADING, gl_contentPane.createSequentialGroup()
+								.addGroup(gl_contentPane.createSequentialGroup()
+									.addPreferredGap(ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
+									.addComponent(btn_ScaduleUpdate, GroupLayout.PREFERRED_SIZE, 91, GroupLayout.PREFERRED_SIZE))
+								.addGroup(gl_contentPane.createSequentialGroup()
 									.addGap(18)
 									.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 										.addComponent(btn_ScadulePay, GroupLayout.PREFERRED_SIZE, 91, GroupLayout.PREFERRED_SIZE)
-										.addComponent(btn_ScaduleDelete, GroupLayout.PREFERRED_SIZE, 91, GroupLayout.PREFERRED_SIZE)))
-								.addGroup(gl_contentPane.createSequentialGroup()
-									.addPreferredGap(ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
-									.addComponent(btn_ScaduleUpdate, GroupLayout.PREFERRED_SIZE, 91, GroupLayout.PREFERRED_SIZE))))
+										.addComponent(btn_ScaduleDelete, GroupLayout.PREFERRED_SIZE, 91, GroupLayout.PREFERRED_SIZE)))))
 						.addGroup(gl_contentPane.createSequentialGroup()
 							.addGap(12)
-							.addComponent(scaduleCalender, GroupLayout.DEFAULT_SIZE, 420, Short.MAX_VALUE)
+							.addComponent(scaduleCalender, GroupLayout.DEFAULT_SIZE, 416, Short.MAX_VALUE)
 							.addGap(130)))
 					.addContainerGap())
 		);
@@ -547,7 +606,7 @@ public class SchaduleUI extends JFrame {
 					.addComponent(scaduleCalender, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 					.addGap(18)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-						.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 540, Short.MAX_VALUE)
+						.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 548, Short.MAX_VALUE)
 						.addGroup(gl_contentPane.createSequentialGroup()
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addComponent(btn_ScaduleAdd)
@@ -556,7 +615,7 @@ public class SchaduleUI extends JFrame {
 							.addGap(32)
 							.addComponent(btn_ScaduleDelete)
 							.addGap(41)
-							.addComponent(btn_ScadulePay, GroupLayout.PREFERRED_SIZE, 365, GroupLayout.PREFERRED_SIZE)))
+							.addComponent(btn_ScadulePay, GroupLayout.PREFERRED_SIZE, 353, GroupLayout.PREFERRED_SIZE)))
 					.addContainerGap())
 		);
 

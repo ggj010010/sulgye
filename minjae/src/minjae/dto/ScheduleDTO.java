@@ -9,6 +9,7 @@ public class ScheduleDTO {
 	String scheDesc;
 	int startIndex;
 	int endIndex;
+	int payhow;
 	
 	String name;
 	String phone;
@@ -112,7 +113,13 @@ public class ScheduleDTO {
 		this.endIndex = endIndex;
 	}
 
+	public int getPayhow() {
+		return payhow;
+	}
 
+	public void setPayhow(int payhow) {
+		this.payhow = payhow;
+	}
 
 	@Override
 	public String toString() {

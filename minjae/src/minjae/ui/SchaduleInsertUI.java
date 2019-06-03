@@ -128,6 +128,7 @@ public class SchaduleInsertUI extends JFrame {
 			public void mouseClicked(MouseEvent e) {
 				ScheduleDAO sd = new ScheduleDAO();
 				sdto.setScheDesc(txtF_Desc.getText());
+				sdto.setPayhow(0);
 				System.out.println(sdto.toString());
 				sd.insertSchedule(sdto);
 				new SchaduleUI(sdto);
