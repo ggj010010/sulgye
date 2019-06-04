@@ -30,7 +30,8 @@ import minjae.dao.TotalDAO;
 import minjae.dto.CustomerDTO;
 import minjae.dto.ScheduleDTO;
 import minjae.dto.TotalDTO;
-
+import javax.swing.JMenuBar;
+import javax.swing.JMenu;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
@@ -174,6 +175,22 @@ public class SchaduleUI extends JFrame {
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 600, 650);
+		
+		JMenuBar menuBar = new JMenuBar();
+		setJMenuBar(menuBar);
+		
+		JMenu mn_Manager = new JMenu("\uACE0\uAC1D\uAD00\uB9AC");
+		mn_Manager.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				new ManagerUI();
+				dispose();
+			}
+		});
+		menuBar.add(mn_Manager);
+		
+		JMenu mn_schedule = new JMenu("\uC2DC\uAC04\uD45C");
+		menuBar.add(mn_schedule);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);

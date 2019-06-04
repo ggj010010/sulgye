@@ -29,6 +29,8 @@ import minjae.dao.CustomerDAO;
 import minjae.dao.DB;
 import minjae.dao.ManagerDAO;
 import minjae.dto.CustomerDTO;
+import javax.swing.JMenuBar;
+import javax.swing.JMenu;
 
 public class ManagerUI extends JFrame {
 	private JPanel contentPane;
@@ -75,6 +77,22 @@ public class ManagerUI extends JFrame {
 		cmb_Search.setModel(new DefaultComboBoxModel(new String[] { "\uBC88\uD638", "\uC774\uB984" }));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1000, 500);
+		
+		JMenuBar menuBar = new JMenuBar();
+		setJMenuBar(menuBar);
+		
+		JMenu mn_Customer = new JMenu("\uACE0\uAC1D\uAD00\uB9AC");
+		menuBar.add(mn_Customer);
+		
+		JMenu mn_schedule = new JMenu("\uC2DC\uAC04\uD45C");
+		mn_schedule.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				new SchaduleUI();
+				dispose();
+			}
+		});
+		menuBar.add(mn_schedule);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
