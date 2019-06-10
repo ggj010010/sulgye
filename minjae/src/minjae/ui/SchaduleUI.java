@@ -31,6 +31,7 @@ import minjae.dto.CustomerDTO;
 import minjae.dto.ScheduleDTO;
 import minjae.dto.TotalDTO;
 import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JMenu;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -46,18 +47,18 @@ public class SchaduleUI extends JFrame {
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					SchaduleUI frame = new SchaduleUI();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+//	public static void main(String[] args) {
+//		EventQueue.invokeLater(new Runnable() {
+//			public void run() {
+//				try {
+//					SchaduleUI frame = new SchaduleUI();
+//					frame.setVisible(true);
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		});
+//	}
 
 	/**
 	 * Create the frame.
@@ -191,6 +192,28 @@ public class SchaduleUI extends JFrame {
 		
 		JMenu mn_schedule = new JMenu("\uC2DC\uAC04\uD45C");
 		menuBar.add(mn_schedule);
+		
+		JMenu mn_Sales = new JMenu("\uB9E4\uCD9C\uD604\uD669");
+		menuBar.add(mn_Sales);
+		
+		JMenuItem mni_DaySales = new JMenuItem("\uC77C\uAC04\uB9E4\uCD9C\uD604\uD669");
+		mni_DaySales.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				new SalesDayUI();
+				dispose();
+			}
+		});
+		mn_Sales.add(mni_DaySales);
+		
+		JMenuItem mni_MonthSales = new JMenuItem("\uC6D4\uAC04\uB9E4\uCD9C\uD604\uD669");
+		mni_MonthSales.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				new SalesMonthUI();
+				dispose();
+			}
+		});
+		mn_Sales.add(mni_MonthSales);
+		
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -214,7 +237,6 @@ public class SchaduleUI extends JFrame {
 				//				table.clearSelection();
 				//				table.revalidate();
 				//				table.repaint();
-				dispose();
 
 			}
 		});
@@ -238,7 +260,6 @@ public class SchaduleUI extends JFrame {
 				for(ScheduleDTO sdto : sd_list) {
 					new ScaduleUpdateUI(sdto);
 				}
-				dispose();			
 			}
 		});
 
@@ -294,7 +315,6 @@ public class SchaduleUI extends JFrame {
 				List<ScheduleDTO> sd_list = sd.selectSchedule(custid, dd);
 				for(ScheduleDTO sdto : sd_list) {;
 					new PaymentUI(sdto,change);
-					dispose();
 				}
 			}
 		});
@@ -376,6 +396,7 @@ public class SchaduleUI extends JFrame {
 
 		scrollPane.setViewportView(table);
 		contentPane.setLayout(gl_contentPane);
+		setExtendedState(MAXIMIZED_BOTH);
 		setVisible(true);
 	}
 
@@ -518,19 +539,22 @@ public class SchaduleUI extends JFrame {
 		btn_ScaduleUpdate.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				ScheduleDTO sdto = new ScheduleDTO();
-				int[] rows = table.getSelectedRows();
-				
+				ManagerDAO md = new ManagerDAO();
+				int custid = 0;
 				int column = table.getSelectedColumn();
 				int row = table.getSelectedRow();
-				
-				sdto.setStartIndex(rows[0]);
-				sdto.setEndIndex(rows[rows.length-1]);
-				sdto.setScheDate(dd);
-
-//				new SchaduleInsertUI(sdto);
-				System.out.println(sdto.toString());
-				dispose();
+				System.out.println(table.getValueAt(row, column).toString().split(" ",5)[0]);
+				System.out.println(table.getValueAt(row, column).toString().split(" ",5)[2]);
+				System.out.println(table.getValueAt(row, column).toString().split(" ",5)[4]);
+				List<CustomerDTO> cdto = md.searchList(table.getValueAt(row, column).toString().split(" ",5)[2]);
+				for(CustomerDTO beans : cdto) {
+					custid = beans.getNo();
+				}
+				List<ScheduleDTO> sd_list = sd.selectSchedule(custid, dd);
+				for(ScheduleDTO sdto : sd_list) {
+					new ScaduleUpdateUI(sdto);
+				}
+				dispose();	
 			}
 		});
 
@@ -666,6 +690,7 @@ public class SchaduleUI extends JFrame {
 
 		scrollPane.setViewportView(table);
 		contentPane.setLayout(gl_contentPane);
+		setExtendedState(MAXIMIZED_BOTH);
 		setVisible(true);
 	}
 }
