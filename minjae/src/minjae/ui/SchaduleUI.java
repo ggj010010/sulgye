@@ -237,6 +237,7 @@ public class SchaduleUI extends JFrame {
 				//				table.clearSelection();
 				//				table.revalidate();
 				//				table.repaint();
+				dispose();
 
 			}
 		});
@@ -315,6 +316,7 @@ public class SchaduleUI extends JFrame {
 				List<ScheduleDTO> sd_list = sd.selectSchedule(custid, dd);
 				for(ScheduleDTO sdto : sd_list) {;
 					new PaymentUI(sdto,change);
+					dispose();
 				}
 			}
 		});

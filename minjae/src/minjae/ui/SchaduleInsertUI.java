@@ -204,9 +204,10 @@ public class SchaduleInsertUI extends JFrame {
 				column = tbl_Customer.getSelectedColumn();
 				lblName.setText(tbl_Customer.getValueAt(row, 0).toString());
 				lblPhone.setText(tbl_Customer.getValueAt(row, 1).toString());
-				List<CustomerDTO> b = md.searchList_P(tbl_Customer.getValueAt(row, 1).toString());
+				List<CustomerDTO> b = md.searchList(tbl_Customer.getValueAt(row, 1).toString());
 				for(CustomerDTO beans : b) {
 					sdto.setCustID(beans.getNo());
+					System.out.println(sdto.getCustID());
 				}
 			}
 		});

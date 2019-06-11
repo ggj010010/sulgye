@@ -24,7 +24,7 @@ public class ManagerDAO extends DB{
 
 						b.setNo(rs.getInt(1));
 						b.setName(rs.getString(2));
-						b.setPhone(rs.getString(3));
+						b.setPhone(new CustomerDAO().phone(rs.getString(3)));
 						list.add(b);
 					}
 				}
@@ -41,6 +41,8 @@ public class ManagerDAO extends DB{
 	}
 	
 	public List<CustomerDTO> searchList(Object search){
+		String[] a = search.toString().split("-");
+		search = a[0] + a[1] + a[2];
 		List<CustomerDTO> list = null;
 		String sql = "select * from Customer where Phone like '" + search + "'";
 		System.out.println(sql);
@@ -55,7 +57,7 @@ public class ManagerDAO extends DB{
 
 						b.setNo(rs.getInt(1));
 						b.setName(rs.getString(2));
-						b.setPhone(rs.getString(3));
+						b.setPhone(new CustomerDAO().phone(rs.getString(3)));
 						list.add(b);
 					}
 				}
@@ -87,7 +89,7 @@ public class ManagerDAO extends DB{
 
 						b.setNo(rs_sL.getInt(1));
 						b.setName(rs_sL.getString(2));
-						b.setPhone(rs_sL.getString(3));
+						b.setPhone(new CustomerDAO().phone(rs_sL.getString(3)));
 						list.add(b);
 					}
 					close();
@@ -119,7 +121,7 @@ public class ManagerDAO extends DB{
 
 						b.setNo(rs_sL.getInt(1));
 						b.setName(rs_sL.getString(2));
-						b.setPhone(rs_sL.getString(3));
+						b.setPhone(new CustomerDAO().phone(rs_sL.getString(3)));
 						list.add(b);
 					}
 					close();

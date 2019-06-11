@@ -1,17 +1,18 @@
 package minjae.ui;
 
 import java.awt.Component;
-import java.awt.EventQueue;
+import java.awt.Font;
+import java.util.List;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
+import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
@@ -20,10 +21,6 @@ import minjae.dao.ManagerDAO;
 import minjae.dao.TotalDAO;
 import minjae.dto.CustomerDTO;
 import minjae.dto.TotalDTO;
-
-import java.awt.Font;
-import java.util.List;
-import javax.swing.LayoutStyle.ComponentPlacement;
 
 public class SubUI extends JFrame {
 
@@ -80,6 +77,8 @@ public class SubUI extends JFrame {
 				obj[i][0] = beans.getTotal_Date();
 				obj[i][1] = beans.getDesc();
 				obj[i][2] = beans.getMoney();
+				obj[i][2] = String.valueOf(Integer.parseInt(obj[i][2].toString())).format("#,###");
+			    
 				obj[i][3] = beans.getChange();
 				i++;
 				System.out.println("asd"+beans.toString());
@@ -143,6 +142,7 @@ public class SubUI extends JFrame {
 		setVisible(true);
 	}
 	
+
 	class SelectCellRenderer extends DefaultTableCellRenderer {
 
 		public SelectCellRenderer() {

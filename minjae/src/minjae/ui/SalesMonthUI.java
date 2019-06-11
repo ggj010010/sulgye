@@ -39,34 +39,34 @@ public class SalesMonthUI extends JFrame {
 	/**
 	 * Launch the application.
 	 */
-//	public static void main(String[] args) {
-//		EventQueue.invokeLater(new Runnable() {
-//			public void run() {
-//				try {
-//					SalesMonthUI frame = new SalesMonthUI();
-//					frame.setVisible(true);
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		});
-//	}
+	//	public static void main(String[] args) {
+	//		EventQueue.invokeLater(new Runnable() {
+	//			public void run() {
+	//				try {
+	//					SalesMonthUI frame = new SalesMonthUI();
+	//					frame.setVisible(true);
+	//				} catch (Exception e) {
+	//					e.printStackTrace();
+	//				}
+	//			}
+	//		});
+	//	}
 
 	/**
 	 * Create the frame.
 	 */
 	public SalesMonthUI() {
 		DB db = DB.sharedInstance();
-		
+
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1000, 800);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
-		
+
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
-		
+
 		JMenu mn_Manager = new JMenu("\uACE0\uAC1D\uAD00\uB9AC");
 		mn_Manager.addMouseListener(new MouseAdapter() {
 			@Override
@@ -76,7 +76,7 @@ public class SalesMonthUI extends JFrame {
 			}
 		});
 		menuBar.add(mn_Manager);
-		
+
 		JMenu mn_schedule = new JMenu("\uC2DC\uAC04\uD45C");
 		mn_schedule.addMouseListener(new MouseAdapter() {
 			@Override
@@ -86,10 +86,10 @@ public class SalesMonthUI extends JFrame {
 			}
 		});
 		menuBar.add(mn_schedule);
-		
+
 		JMenu mn_Sales = new JMenu("\uB9E4\uCD9C\uD604\uD669");
 		menuBar.add(mn_Sales);
-		
+
 		JMenuItem mni_DaySales = new JMenuItem("\uC77C\uAC04\uB9E4\uCD9C\uD604\uD669");
 		mni_DaySales.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -98,14 +98,14 @@ public class SalesMonthUI extends JFrame {
 			}
 		});
 		mn_Sales.add(mni_DaySales);
-		
+
 		JMenuItem mni_MonthSales = new JMenuItem("\uC6D4\uAC04\uB9E4\uCD9C\uD604\uD669");
 		mn_Sales.add(mni_MonthSales);
 
 		JMonthChooser monthChooser = new JMonthChooser();
 
 		JYearChooser yearChooser = new JYearChooser();
-		
+
 
 		CategoryChart chart = new CategoryChartBuilder().width(800).height(600).title("월 매출").xAxisTitle("날짜")
 				.yAxisTitle("매출 현황").build();
@@ -124,7 +124,6 @@ public class SalesMonthUI extends JFrame {
 		List<String> da = new ArrayList<>();
 		List<Long> ma = new ArrayList<>();
 		List<Long> ca = new ArrayList<>();
-		int n = 0;
 		for (SalesDTO beans : sd_list) {
 			System.out.println(beans.toString());
 			if(beans.getDate().equals("0")) {
@@ -134,12 +133,14 @@ public class SalesMonthUI extends JFrame {
 					if(beans.getDate().equals(da.get(da.size()-1))) {
 						if(beans.getHow() == 1) {
 							//ta.add((long) 0);
-							System.out.println(n);
-							long save = ma.get(n);
-							ma.remove(n);
-							ma.add(n,save + (long) beans.getTotal());
-							//ca.add((long) 0);
-							continue;
+							if(ma.size() != 0) {
+								System.out.println(ma.size()-1);
+								long save = ma.get(ma.size()-1);
+								ma.remove(ma.size()-1);
+								ma.add(ma.size(),save + (long) beans.getTotal());
+								//ca.add((long) 0);
+								continue;
+							}
 						}
 					}
 				}
@@ -177,7 +178,6 @@ public class SalesMonthUI extends JFrame {
 					//ma.add((long) 0);
 					if(da.size() !=0) {
 						if(!da.get(da.size()-1).equals(beans.getDate())) {
-							da.remove(da.size()-1);
 							da.add(beans.getDate());
 							ca.add((long) beans.getTotal());
 						}else {
@@ -187,11 +187,18 @@ public class SalesMonthUI extends JFrame {
 						da.add(beans.getDate());
 						ca.add((long) beans.getTotal());
 					}
-				}/*else if(beans.getHow() == 3) {
-					ta.add((long) beans.getTotal());
-					ma.add((long) 0);
-					ca.add((long) 0);
-				}*/
+				}
+				if(da.size() > 0) {
+					if(beans.getDate() != da.get(da.size()-1)) {
+						if(da.size() > ca.size()) {
+							ca.add((long)0); 
+						}
+						if(da.size() > ma.size()) {
+							ma.add((long)0);
+						}
+					}
+				}
+
 			}
 
 		}
@@ -199,17 +206,17 @@ public class SalesMonthUI extends JFrame {
 
 		if(da.size() != 0) {
 			if(ta.size() != 0)
-			chart.addSeries("총",da,ta);
+				chart.addSeries("총",da,ta);
 			if(ma.size() != 0)
-			chart.addSeries("현금",da,ma);
+				chart.addSeries("현금",da,ma);
 			if(ca.size() != 0)
-			chart.addSeries("카드",da,ca);
+				chart.addSeries("카드",da,ca);
 		}
-		
+
 		panel =
 				//new JPanel();
 				new XChartPanel(chart);
-		
+
 		JButton btnNewButton = new JButton("\uAC80\uC0C9");
 		btnNewButton.addMouseListener(new MouseAdapter() {
 			@Override
@@ -224,22 +231,25 @@ public class SalesMonthUI extends JFrame {
 				List<String> da = new ArrayList<>();
 				List<Long> ma = new ArrayList<>();
 				List<Long> ca = new ArrayList<>();
-				int n = 0;
 				for (SalesDTO beans : sd_list) {
 					System.out.println(beans.toString());
 					if(beans.getDate().equals("0")) {
 						//ta.add((long) beans.getTotal());
 					}else {
 						if(da.size() != 0) {
-							if(beans.getDate().equals(da.get(da.size()-1))) {
-								if(beans.getHow() == 1) {
-									//ta.add((long) 0);
-									System.out.println(n);
-									long save = ma.get(n);
-									ma.remove(n);
-									ma.add(n,save + (long) beans.getTotal());
-									//ca.add((long) 0);
-									continue;
+							if(da.size() != 0) {
+								if(beans.getDate().equals(da.get(da.size()-1))) {
+									if(beans.getHow() == 1) {
+										//ta.add((long) 0);
+										if(ma.size() != 0) {
+											System.out.println(ma.size());
+											long save = ma.get(ma.size()-1);
+											ma.remove(ma.size()-1);
+											ma.add(ma.size()-1,save + (long) beans.getTotal());
+											//ca.add((long) 0);
+											continue;
+										}
+									}
 								}
 							}
 						}
@@ -298,14 +308,14 @@ public class SalesMonthUI extends JFrame {
 				chart.removeSeries("총");
 				chart.removeSeries("현금");
 				chart.removeSeries("카드");
-				
+
 				if(da.size() != 0) {
 					if(ta.size() != 0)
-					chart.addSeries("총",da,ta);
+						chart.addSeries("총",da,ta);
 					if(ma.size() != 0)
-					chart.addSeries("현금",da,ma);
+						chart.addSeries("현금",da,ma);
 					if(ca.size() != 0)
-					chart.addSeries("카드",da,ca);
+						chart.addSeries("카드",da,ca);
 				}
 				contentPane.remove(panel);
 				panel =
@@ -315,63 +325,63 @@ public class SalesMonthUI extends JFrame {
 				panel.repaint();
 				GroupLayout gl_contentPane = new GroupLayout(contentPane);
 				gl_contentPane.setHorizontalGroup(
-					gl_contentPane.createParallelGroup(Alignment.TRAILING)
+						gl_contentPane.createParallelGroup(Alignment.TRAILING)
 						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
-								.addGroup(gl_contentPane.createSequentialGroup()
-									.addContainerGap()
-									.addComponent(yearChooser, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-									.addGap(18)
-									.addComponent(monthChooser, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-									.addPreferredGap(ComponentPlacement.UNRELATED)
-									.addComponent(btnNewButton))
-								.addComponent(panel, GroupLayout.DEFAULT_SIZE, 971, Short.MAX_VALUE))
-							.addGap(1))
-				);
+								.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
+										.addGroup(gl_contentPane.createSequentialGroup()
+												.addContainerGap()
+												.addComponent(yearChooser, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+												.addGap(18)
+												.addComponent(monthChooser, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+												.addPreferredGap(ComponentPlacement.UNRELATED)
+												.addComponent(btnNewButton))
+										.addComponent(panel, GroupLayout.DEFAULT_SIZE, 971, Short.MAX_VALUE))
+								.addGap(1))
+						);
 				gl_contentPane.setVerticalGroup(
-					gl_contentPane.createParallelGroup(Alignment.LEADING)
+						gl_contentPane.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_contentPane.createSequentialGroup()
-							.addContainerGap()
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-								.addComponent(btnNewButton)
-								.addComponent(monthChooser, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(yearChooser, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-							.addGap(15)
-							.addComponent(panel, GroupLayout.DEFAULT_SIZE, 689, Short.MAX_VALUE)
-							.addGap(0))
-				);
+								.addContainerGap()
+								.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+										.addComponent(btnNewButton)
+										.addComponent(monthChooser, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addComponent(yearChooser, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+								.addGap(15)
+								.addComponent(panel, GroupLayout.DEFAULT_SIZE, 689, Short.MAX_VALUE)
+								.addGap(0))
+						);
 				contentPane.setLayout(gl_contentPane);
 			}
 		});
-				
+
 
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
-			gl_contentPane.createParallelGroup(Alignment.TRAILING)
+				gl_contentPane.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_contentPane.createSequentialGroup()
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addContainerGap()
-							.addComponent(yearChooser, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-							.addGap(18)
-							.addComponent(monthChooser, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addComponent(btnNewButton))
-						.addComponent(panel, GroupLayout.DEFAULT_SIZE, 971, Short.MAX_VALUE))
-					.addGap(1))
-		);
+						.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
+								.addGroup(gl_contentPane.createSequentialGroup()
+										.addContainerGap()
+										.addComponent(yearChooser, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addGap(18)
+										.addComponent(monthChooser, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addPreferredGap(ComponentPlacement.UNRELATED)
+										.addComponent(btnNewButton))
+								.addComponent(panel, GroupLayout.DEFAULT_SIZE, 971, Short.MAX_VALUE))
+						.addGap(1))
+				);
 		gl_contentPane.setVerticalGroup(
-			gl_contentPane.createParallelGroup(Alignment.LEADING)
+				gl_contentPane.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_contentPane.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addComponent(btnNewButton)
-						.addComponent(monthChooser, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(yearChooser, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addGap(15)
-					.addComponent(panel, GroupLayout.DEFAULT_SIZE, 689, Short.MAX_VALUE)
-					.addGap(0))
-		);
+						.addContainerGap()
+						.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+								.addComponent(btnNewButton)
+								.addComponent(monthChooser, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(yearChooser, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addGap(15)
+						.addComponent(panel, GroupLayout.DEFAULT_SIZE, 689, Short.MAX_VALUE)
+						.addGap(0))
+				);
 		contentPane.setLayout(gl_contentPane);
 		setExtendedState(MAXIMIZED_BOTH);
 		setVisible(true);
