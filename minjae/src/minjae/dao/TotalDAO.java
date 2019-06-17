@@ -9,6 +9,8 @@ import minjae.dto.TotalDTO;
 public class TotalDAO extends DB {
 
 	public List<TotalDTO> getNailList(Object obj, int a) {
+		String[] aa = obj.toString().split("-");
+		obj = aa[0] + aa[1] + aa[2];
 		List<TotalDTO> list = null;
 		String sql = "select totalid,total_class,customer_total.custid,name,phone,total_date,total_desc,total_money,nail_change "
 				+ "from customer_total,customer where total_class = " 

@@ -77,7 +77,7 @@ public class SubUI extends JFrame {
 				obj[i][0] = beans.getTotal_Date();
 				obj[i][1] = beans.getDesc();
 				obj[i][2] = beans.getMoney();
-				obj[i][2] = String.valueOf(Integer.parseInt(obj[i][2].toString())).format("#,###");
+				obj[i][2] = String.valueOf(Integer.parseInt(obj[i][2].toString()));
 			    
 				obj[i][3] = beans.getChange();
 				i++;

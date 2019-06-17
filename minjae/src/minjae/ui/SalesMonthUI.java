@@ -29,6 +29,7 @@ import com.toedter.calendar.JYearChooser;
 import minjae.dao.DB;
 import minjae.dao.SalesDAO;
 import minjae.dto.SalesDTO;
+import javax.swing.JLabel;
 
 public class SalesMonthUI extends JFrame {
 	java.sql.Date dd;
@@ -353,35 +354,45 @@ public class SalesMonthUI extends JFrame {
 				contentPane.setLayout(gl_contentPane);
 			}
 		});
-
+		
+		JLabel lblNewLabel = new JLabel("\uC774 \uB2EC\uC758 \uC778\uC13C\uD2F0\uBE0C : ");
+		
+		JLabel lbl_insentive = new JLabel(sd.selectMonthInsentive(String.valueOf(year).substring(2, 4), "0"+String.valueOf(month)));
 
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
-				gl_contentPane.createParallelGroup(Alignment.TRAILING)
+			gl_contentPane.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_contentPane.createSequentialGroup()
-						.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
-								.addGroup(gl_contentPane.createSequentialGroup()
-										.addContainerGap()
-										.addComponent(yearChooser, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addGap(18)
-										.addComponent(monthChooser, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addPreferredGap(ComponentPlacement.UNRELATED)
-										.addComponent(btnNewButton))
-								.addComponent(panel, GroupLayout.DEFAULT_SIZE, 971, Short.MAX_VALUE))
-						.addGap(1))
-				);
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addContainerGap()
+							.addComponent(lblNewLabel)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(lbl_insentive)
+							.addPreferredGap(ComponentPlacement.RELATED, 635, Short.MAX_VALUE)
+							.addComponent(yearChooser, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addGap(18)
+							.addComponent(monthChooser, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addComponent(btnNewButton))
+						.addComponent(panel, GroupLayout.DEFAULT_SIZE, 973, Short.MAX_VALUE))
+					.addGap(1))
+		);
 		gl_contentPane.setVerticalGroup(
-				gl_contentPane.createParallelGroup(Alignment.LEADING)
+			gl_contentPane.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_contentPane.createSequentialGroup()
-						.addContainerGap()
-						.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-								.addComponent(btnNewButton)
-								.addComponent(monthChooser, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(yearChooser, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-						.addGap(15)
-						.addComponent(panel, GroupLayout.DEFAULT_SIZE, 689, Short.MAX_VALUE)
-						.addGap(0))
-				);
+					.addContainerGap()
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addComponent(btnNewButton)
+						.addComponent(monthChooser, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(yearChooser, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+							.addComponent(lblNewLabel)
+							.addComponent(lbl_insentive)))
+					.addGap(15)
+					.addComponent(panel, GroupLayout.DEFAULT_SIZE, 682, Short.MAX_VALUE)
+					.addGap(0))
+		);
 		contentPane.setLayout(gl_contentPane);
 		setExtendedState(MAXIMIZED_BOTH);
 		setVisible(true);

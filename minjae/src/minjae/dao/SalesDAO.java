@@ -136,4 +136,53 @@ public class SalesDAO extends DB{
 		}
 		return list;
 	}
+	
+	public String selectMonthInsentive(String year,String month){
+		String insen = null;
+		String sql ="select"
+				+ " decode(total_class,null,'총합',total_class) total_class"
+				+ " ,sum(insentive) insen"
+				+ " from"
+				+ " (select"
+				+ " decode(total_class,1,'네일',2,'속눈썹',total_class) total_class"
+				+ " ,decode(total_class,1,sum(total_money)*0.07,2,sum(total_money)*0.1,total_class) insentive"
+				+ " from"
+				+ " CUSTOMER_TOTAL,schedule"
+				+ " where"
+				+ " total_date like '"
+				+ year
+				+ "/"
+				+ month
+				+ "/%'"
+				+ " and"
+				+ " (total_date = schedate"
+				+ " and"
+				+ " customer_total.custid = schedule.custid"
+				+ " and"
+				+ " (payhow != 3"
+				+ " or"
+				+ " total_desc='정액제'))"
+				+ " group by total_class)"
+				+ " group by rollup((total_class))";
+		System.out.println(sql);
+		if(connect()) {
+			try {
+				stmt = conn.createStatement();
+				if(stmt !=null) {
+					rs = stmt.executeQuery(sql);
+					while(rs.next()) {
+						insen = rs.getString(2);
+					}
+				}
+			}catch(SQLException e) {
+				e.printStackTrace();
+			}finally {
+				close();
+			}
+		}else {
+			System.out.println("데이터 베이스 연결 실패");
+			System.exit(0);
+		}
+		return insen;
+	}
 }
