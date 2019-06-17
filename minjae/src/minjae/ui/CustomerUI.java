@@ -318,8 +318,8 @@ public class CustomerUI extends JFrame {
 		for (CustomerDTO beans : cb) {
 			txtF_Name.setText(beans.getName());
 			txtF_Phone1.setText(beans.getPhone().substring(0, 3));
-			txtF_Phone2.setText(beans.getPhone().substring(3, 7));
-			txtF_Phone3.setText(beans.getPhone().substring(7, 11));
+			txtF_Phone2.setText(beans.getPhone().substring(4, 8));
+			txtF_Phone3.setText(beans.getPhone().substring(9, 13));
 			
 		}
 		

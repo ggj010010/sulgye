@@ -74,6 +74,14 @@ public class ScaduleUpdateUI extends JFrame {
 		
 		
 		JButton btn_Cancle = new JButton("\uCDE8\uC18C");
+		btn_Cancle.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				new SchaduleUI(sdto);
+				dispose();
+			}
+		});
+		
 		
 		JDateChooser dateChooser = new JDateChooser();
 		dateChooser.setDate(sdto.getScheDate());
@@ -106,7 +114,7 @@ public class ScaduleUpdateUI extends JFrame {
 				System.out.println(sdto.toString());
 				sd.updateSchedule(sdto);
 				new SchaduleUI(sdto);
-				setVisible(false);
+				dispose();
 			}
 		});
 		

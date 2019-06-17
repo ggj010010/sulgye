@@ -62,6 +62,8 @@ public class CustomerDAO extends DB{
 	}
 	
 	public void customerUpdate(CustomerDTO cd,Object search){
+		String[] a = search.toString().split("-");
+		search = a[0] + a[1] + a[2];
 		String sql = "update Customer set phone = '" + cd.getPhone() + "' where phone like '" + search + "'";
 		System.out.println(sql);
 		if(connect()) {
@@ -81,6 +83,8 @@ public class CustomerDAO extends DB{
 	}
 	
 	public void customerDelete(Object search) {
+		String[] a = search.toString().split("-");
+		search = a[0] + a[1] + a[2];
 		String sql = "delete from Customer where Phone like '" + search + "'";
 		System.out.println(sql);
 		if(connect()) {

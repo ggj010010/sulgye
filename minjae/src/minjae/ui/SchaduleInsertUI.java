@@ -132,11 +132,18 @@ public class SchaduleInsertUI extends JFrame {
 				System.out.println(sdto.toString());
 				sd.insertSchedule(sdto);
 				new SchaduleUI(sdto);
-				setVisible(false);
+				dispose();
 			}
 		});
 		
 		btn_Cancle = new JButton("\uCDE8    \uC18C");
+		btn_Cancle.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				new SchaduleUI(sdto);
+				dispose();
+			}
+		});
 		
 		JScrollPane scrollPane = new JScrollPane();
 		

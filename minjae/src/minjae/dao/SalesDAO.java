@@ -136,9 +136,61 @@ public class SalesDAO extends DB{
 		}
 		return list;
 	}
+	public List<SalesDTO> selectMonthSalesTotal(String year,String month){
+		List<SalesDTO> list = null;
+		String sql ="select"
+				+ " decode(payhow,null,0,3,1,payhow) payhow"
+				+ " ,sum(insentive) insentive"
+				+ " from"
+				+ " (select"
+				+ " decode(payhow,3,1,payhow) payhow"
+				+ " ,sum(total_money) insentive"
+				+ " from"
+				+ " CUSTOMER_TOTAL,schedule"
+				+ " where"
+				+ " total_date like '"
+				+ year
+				+ "/"
+				+ month
+				+ "/%'"
+				+ " and"
+				+ " (total_date = schedate"
+				+ " and"
+				+ " customer_total.custid = schedule.custid"
+				+ " and"
+				+ " (payhow != 3"
+				+ " or"
+				+ " total_desc='정액제'))"
+				+ " group by payhow)"
+				+ " group by rollup((payhow))";
+		System.out.println(sql);
+		if(connect()) {
+			try {
+				stmt = conn.createStatement();
+				if(stmt !=null) {
+					rs = stmt.executeQuery(sql);
+					list = new ArrayList<SalesDTO>();
+					while(rs.next()) {
+						SalesDTO b = new SalesDTO();
+						b.setHow(rs.getInt(1));
+						b.setTotal(rs.getInt(2));
+						list.add(b);
+					}
+				}
+			}catch(SQLException e) {
+				e.printStackTrace();
+			}finally {
+				close();
+			}
+		}else {
+			System.out.println("데이터 베이스 연결 실패");
+			System.exit(0);
+		}
+		return list;
+	}
 	
-	public String selectMonthInsentive(String year,String month){
-		String insen = null;
+	public int selectMonthInsentive(String year,String month){
+		int insen = 0;
 		String sql ="select"
 				+ " decode(total_class,null,'총합',total_class) total_class"
 				+ " ,sum(insentive) insen"
@@ -171,7 +223,7 @@ public class SalesDAO extends DB{
 				if(stmt !=null) {
 					rs = stmt.executeQuery(sql);
 					while(rs.next()) {
-						insen = rs.getString(2);
+						insen = rs.getInt(2);
 					}
 				}
 			}catch(SQLException e) {

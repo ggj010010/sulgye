@@ -34,6 +34,8 @@ import javax.swing.JLabel;
 public class SalesMonthUI extends JFrame {
 	java.sql.Date dd;
 	JPanel panel;
+	JLabel lbl_insentive;
+	JLabel lbl_total;
 
 	private JPanel contentPane;
 
@@ -120,18 +122,31 @@ public class SalesMonthUI extends JFrame {
 		int month = monthChooser.getMonth()+1;
 
 		List<SalesDTO> sd_list = sd.selectMonthSales(String.valueOf(year).substring(2, 4), "0"+String.valueOf(month));
+		List<SalesDTO> sd_list2 = sd.selectMonthSalesTotal(String.valueOf(year).substring(2, 4), "0"+String.valueOf(month));
 
 		List<Long> ta = new ArrayList<>();
 		List<String> da = new ArrayList<>();
 		List<Long> ma = new ArrayList<>();
 		List<Long> ca = new ArrayList<>();
+//		for(SalesDTO d : sd_list2 ) {
+//			if(d.getHow() == 0) {
+//				ta.add((long)d.getTotal());
+//			}else if(d.getHow() == 1) {
+//				ma.add((long)d.getTotal());
+//			}else if(d.getHow() == 2) {
+//				ca.add((long)d.getTotal());
+//			}
+//			
+//		}
+//		da.add(month+"¿ù ÃÑ¾×");
+		String check_da=null;
 		for (SalesDTO beans : sd_list) {
 			System.out.println(beans.toString());
 			if(beans.getDate().equals("0")) {
 				//ta.add((long) beans.getTotal());
 			}else {
 				if(da.size() != 0) {
-					if(beans.getDate().equals(da.get(da.size()-1))) {
+					if(beans.getDate().equals(check_da)) {
 						if(beans.getHow() == 1) {
 							//ta.add((long) 0);
 							if(ma.size() != 0) {
@@ -149,12 +164,14 @@ public class SalesMonthUI extends JFrame {
 				if(beans.getHow() == 0) {
 					if(da.size() != 0) {
 						if(!da.get(da.size()-1).equals(beans.getDate())) {
+							check_da = beans.getDate();
 							da.add(beans.getDate());
 							ta.add((long) beans.getTotal());
 						}else {
 							ta.add((long) beans.getTotal());
 						}
 					}else {
+						check_da = beans.getDate();
 						da.add(beans.getDate());
 						ta.add((long) beans.getTotal());
 					}
@@ -164,12 +181,14 @@ public class SalesMonthUI extends JFrame {
 					//ta.add((long) 0);
 					if(da.size() != 0) {
 						if(!da.get(da.size()-1).equals(beans.getDate())) {
+							check_da = beans.getDate();
 							da.add(beans.getDate());
 							ma.add((long) beans.getTotal());
 						}else {
 							ma.add((long) beans.getTotal());
 						}
 					}else {
+						check_da = beans.getDate();
 						da.add(beans.getDate());
 						ma.add((long) beans.getTotal());
 					}
@@ -217,6 +236,21 @@ public class SalesMonthUI extends JFrame {
 		panel =
 				//new JPanel();
 				new XChartPanel(chart);
+		
+		JLabel lblNewLabel = new JLabel("\uC774 \uB2EC\uC758 \uC778\uC13C\uD2F0\uBE0C : ");
+		
+		lbl_insentive = new JLabel(String.format("%,d", sd.selectMonthInsentive(String.valueOf(year).substring(2, 4), "0"+String.valueOf(month))));
+
+		JLabel lblNewLabel_1 = new JLabel("\uCD1D \uB9E4\uCD9C\uC561 : ");
+		
+		int total = 0;
+		for(SalesDTO d : sd_list2 ) {
+			if(d.getHow() == 0) {
+				total = d.getTotal();
+			}
+		}
+		lbl_total = new JLabel(String.format("%,d", total));
+		
 
 		JButton btnNewButton = new JButton("\uAC80\uC0C9");
 		btnNewButton.addMouseListener(new MouseAdapter() {
@@ -227,29 +261,40 @@ public class SalesMonthUI extends JFrame {
 				int month = monthChooser.getMonth()+1;
 
 				List<SalesDTO> sd_list = sd.selectMonthSales(String.valueOf(year).substring(2, 4), "0"+String.valueOf(month));
+				List<SalesDTO> sd_list2 = sd.selectMonthSalesTotal(String.valueOf(year).substring(2, 4), "0"+String.valueOf(month));
 
 				List<Long> ta = new ArrayList<>();
 				List<String> da = new ArrayList<>();
 				List<Long> ma = new ArrayList<>();
 				List<Long> ca = new ArrayList<>();
+//				for(SalesDTO d : sd_list2 ) {
+//					if(d.getHow() == 0) {
+//						ta.add((long)d.getTotal());
+//					}else if(d.getHow() == 1) {
+//						ma.add((long)d.getTotal());
+//					}else if(d.getHow() == 2) {
+//						ca.add((long)d.getTotal());
+//					}
+//					
+//				}
+//				da.add(month+"¿ù ÃÑ¾×");
+				String check_da=null;
 				for (SalesDTO beans : sd_list) {
 					System.out.println(beans.toString());
 					if(beans.getDate().equals("0")) {
 						//ta.add((long) beans.getTotal());
 					}else {
 						if(da.size() != 0) {
-							if(da.size() != 0) {
-								if(beans.getDate().equals(da.get(da.size()-1))) {
-									if(beans.getHow() == 1) {
-										//ta.add((long) 0);
-										if(ma.size() != 0) {
-											System.out.println(ma.size());
-											long save = ma.get(ma.size()-1);
-											ma.remove(ma.size()-1);
-											ma.add(ma.size()-1,save + (long) beans.getTotal());
-											//ca.add((long) 0);
-											continue;
-										}
+							if(beans.getDate().equals(check_da)) {
+								if(beans.getHow() == 1) {
+									//ta.add((long) 0);
+									if(ma.size() != 0) {
+										System.out.println(ma.size()-1);
+										long save = ma.get(ma.size()-1);
+										ma.remove(ma.size()-1);
+										ma.add(ma.size(),save + (long) beans.getTotal());
+										//ca.add((long) 0);
+										continue;
 									}
 								}
 							}
@@ -258,12 +303,14 @@ public class SalesMonthUI extends JFrame {
 						if(beans.getHow() == 0) {
 							if(da.size() != 0) {
 								if(!da.get(da.size()-1).equals(beans.getDate())) {
+									check_da = beans.getDate();
 									da.add(beans.getDate());
 									ta.add((long) beans.getTotal());
 								}else {
 									ta.add((long) beans.getTotal());
 								}
 							}else {
+								check_da = beans.getDate();
 								da.add(beans.getDate());
 								ta.add((long) beans.getTotal());
 							}
@@ -273,12 +320,14 @@ public class SalesMonthUI extends JFrame {
 							//ta.add((long) 0);
 							if(da.size() != 0) {
 								if(!da.get(da.size()-1).equals(beans.getDate())) {
+									check_da = beans.getDate();
 									da.add(beans.getDate());
 									ma.add((long) beans.getTotal());
 								}else {
 									ma.add((long) beans.getTotal());
 								}
 							}else {
+								check_da = beans.getDate();
 								da.add(beans.getDate());
 								ma.add((long) beans.getTotal());
 							}
@@ -297,11 +346,18 @@ public class SalesMonthUI extends JFrame {
 								da.add(beans.getDate());
 								ca.add((long) beans.getTotal());
 							}
-						}/*else if(beans.getHow() == 3) {
-							ta.add((long) beans.getTotal());
-							ma.add((long) 0);
-							ca.add((long) 0);
-						}*/
+						}
+						if(da.size() > 0) {
+							if(beans.getDate() != da.get(da.size()-1)) {
+								if(da.size() > ca.size()) {
+									ca.add((long)0); 
+								}
+								if(da.size() > ma.size()) {
+									ma.add((long)0);
+								}
+							}
+						}
+
 					}
 
 				}
@@ -309,7 +365,7 @@ public class SalesMonthUI extends JFrame {
 				chart.removeSeries("ÃÑ");
 				chart.removeSeries("Çö±Ý");
 				chart.removeSeries("Ä«µå");
-
+				
 				if(da.size() != 0) {
 					if(ta.size() != 0)
 						chart.addSeries("ÃÑ",da,ta);
@@ -318,47 +374,80 @@ public class SalesMonthUI extends JFrame {
 					if(ca.size() != 0)
 						chart.addSeries("Ä«µå",da,ca);
 				}
-				contentPane.remove(panel);
+
 				panel =
-						// new JPanel();
+						//new JPanel();
 						new XChartPanel(chart);
 				panel.revalidate();
 				panel.repaint();
+				
+				JLabel lblNewLabel = new JLabel("\uC774 \uB2EC\uC758 \uC778\uC13C\uD2F0\uBE0C : ");
+				
+				lbl_insentive.setText(String.format("%,d", sd.selectMonthInsentive(String.valueOf(year).substring(2, 4), "0"+String.valueOf(month))));
+
+				JLabel lblNewLabel_1 = new JLabel("\uCD1D \uB9E4\uCD9C\uC561 : ");
+				
+				int total = 0;
+				for(SalesDTO d : sd_list2 ) {
+					if(d.getHow() == 0) {
+						total = d.getTotal();
+					}
+				}
+				lbl_total.setText(String.format("%,d", total));
 				GroupLayout gl_contentPane = new GroupLayout(contentPane);
 				gl_contentPane.setHorizontalGroup(
-						gl_contentPane.createParallelGroup(Alignment.TRAILING)
+					gl_contentPane.createParallelGroup(Alignment.TRAILING)
 						.addGroup(gl_contentPane.createSequentialGroup()
-								.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
+								.addGroup(gl_contentPane.createSequentialGroup()
+									.addContainerGap()
+									.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 										.addGroup(gl_contentPane.createSequentialGroup()
-												.addContainerGap()
-												.addComponent(yearChooser, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-												.addGap(18)
-												.addComponent(monthChooser, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-												.addPreferredGap(ComponentPlacement.UNRELATED)
-												.addComponent(btnNewButton))
-										.addComponent(panel, GroupLayout.DEFAULT_SIZE, 971, Short.MAX_VALUE))
-								.addGap(1))
-						);
+											.addComponent(lblNewLabel)
+											.addPreferredGap(ComponentPlacement.RELATED)
+											.addComponent(lbl_insentive))
+										.addGroup(gl_contentPane.createSequentialGroup()
+											.addComponent(lblNewLabel_1)
+											.addPreferredGap(ComponentPlacement.RELATED)
+											.addComponent(lbl_total)))
+									.addPreferredGap(ComponentPlacement.RELATED, 550, Short.MAX_VALUE)
+									.addComponent(yearChooser, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+									.addGap(18)
+									.addComponent(monthChooser, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+									.addPreferredGap(ComponentPlacement.UNRELATED)
+									.addComponent(btnNewButton))
+								.addComponent(panel, GroupLayout.DEFAULT_SIZE, 971, Short.MAX_VALUE))
+							.addGap(1))
+				);
 				gl_contentPane.setVerticalGroup(
-						gl_contentPane.createParallelGroup(Alignment.LEADING)
+					gl_contentPane.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_contentPane.createSequentialGroup()
-								.addContainerGap()
-								.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+							.addContainerGap()
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
+								.addGroup(gl_contentPane.createSequentialGroup()
+									.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 										.addComponent(btnNewButton)
 										.addComponent(monthChooser, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 										.addComponent(yearChooser, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-								.addGap(15)
-								.addComponent(panel, GroupLayout.DEFAULT_SIZE, 689, Short.MAX_VALUE)
-								.addGap(0))
-						);
+									.addGap(15))
+								.addGroup(gl_contentPane.createSequentialGroup()
+									.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+										.addComponent(lblNewLabel)
+										.addComponent(lbl_insentive))
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+										.addComponent(lblNewLabel_1)
+										.addComponent(lbl_total))
+									.addPreferredGap(ComponentPlacement.RELATED)))
+							.addComponent(panel, GroupLayout.DEFAULT_SIZE, 663, Short.MAX_VALUE)
+							.addGap(0))
+				);
 				contentPane.setLayout(gl_contentPane);
 			}
 		});
 		
-		JLabel lblNewLabel = new JLabel("\uC774 \uB2EC\uC758 \uC778\uC13C\uD2F0\uBE0C : ");
-		
-		JLabel lbl_insentive = new JLabel(sd.selectMonthInsentive(String.valueOf(year).substring(2, 4), "0"+String.valueOf(month)));
 
+		
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
 			gl_contentPane.createParallelGroup(Alignment.TRAILING)
@@ -366,31 +455,45 @@ public class SalesMonthUI extends JFrame {
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
 						.addGroup(gl_contentPane.createSequentialGroup()
 							.addContainerGap()
-							.addComponent(lblNewLabel)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(lbl_insentive)
-							.addPreferredGap(ComponentPlacement.RELATED, 635, Short.MAX_VALUE)
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+								.addGroup(gl_contentPane.createSequentialGroup()
+									.addComponent(lblNewLabel)
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(lbl_insentive))
+								.addGroup(gl_contentPane.createSequentialGroup()
+									.addComponent(lblNewLabel_1)
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(lbl_total)))
+							.addPreferredGap(ComponentPlacement.RELATED, 550, Short.MAX_VALUE)
 							.addComponent(yearChooser, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 							.addGap(18)
 							.addComponent(monthChooser, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 							.addPreferredGap(ComponentPlacement.UNRELATED)
 							.addComponent(btnNewButton))
-						.addComponent(panel, GroupLayout.DEFAULT_SIZE, 973, Short.MAX_VALUE))
+						.addComponent(panel, GroupLayout.DEFAULT_SIZE, 971, Short.MAX_VALUE))
 					.addGap(1))
 		);
 		gl_contentPane.setVerticalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addContainerGap()
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addComponent(btnNewButton)
-						.addComponent(monthChooser, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(yearChooser, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-							.addComponent(lblNewLabel)
-							.addComponent(lbl_insentive)))
-					.addGap(15)
-					.addComponent(panel, GroupLayout.DEFAULT_SIZE, 682, Short.MAX_VALUE)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+								.addComponent(btnNewButton)
+								.addComponent(monthChooser, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(yearChooser, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+							.addGap(15))
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+								.addComponent(lblNewLabel)
+								.addComponent(lbl_insentive))
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+								.addComponent(lblNewLabel_1)
+								.addComponent(lbl_total))
+							.addPreferredGap(ComponentPlacement.RELATED)))
+					.addComponent(panel, GroupLayout.DEFAULT_SIZE, 663, Short.MAX_VALUE)
 					.addGap(0))
 		);
 		contentPane.setLayout(gl_contentPane);

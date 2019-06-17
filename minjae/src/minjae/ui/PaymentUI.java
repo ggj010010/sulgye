@@ -85,6 +85,7 @@ public class PaymentUI extends JFrame {
 		btn_Cancle.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
+				new SchaduleUI(sdto);
 				dispose();
 			}
 		});

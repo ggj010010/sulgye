@@ -260,6 +260,7 @@ public class SchaduleUI extends JFrame {
 				List<ScheduleDTO> sd_list = sd.selectSchedule(custid, dd);
 				for(ScheduleDTO sdto : sd_list) {
 					new ScaduleUpdateUI(sdto);
+					dispose();
 				}
 			}
 		});
@@ -507,6 +508,43 @@ public class SchaduleUI extends JFrame {
 		AttributiveCellTableModel ml = new AttributiveCellTableModel(rowData2,dataColumnName);
 		cellAtt = (CellSpan) ml.getCellAttribute();
 		table = new MultiSpanCellTable(ml);
+		
+		JMenuBar menuBar = new JMenuBar();
+		setJMenuBar(menuBar);
+		
+		JMenu mn_Manager = new JMenu("\uACE0\uAC1D\uAD00\uB9AC");
+		mn_Manager.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				new ManagerUI();
+				dispose();
+			}
+		});
+		menuBar.add(mn_Manager);
+		
+		JMenu mn_schedule = new JMenu("\uC2DC\uAC04\uD45C");
+		menuBar.add(mn_schedule);
+		
+		JMenu mn_Sales = new JMenu("\uB9E4\uCD9C\uD604\uD669");
+		menuBar.add(mn_Sales);
+		
+		JMenuItem mni_DaySales = new JMenuItem("\uC77C\uAC04\uB9E4\uCD9C\uD604\uD669");
+		mni_DaySales.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				new SalesDayUI();
+				dispose();
+			}
+		});
+		mn_Sales.add(mni_DaySales);
+		
+		JMenuItem mni_MonthSales = new JMenuItem("\uC6D4\uAC04\uB9E4\uCD9C\uD604\uD669");
+		mni_MonthSales.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				new SalesMonthUI();
+				dispose();
+			}
+		});
+		mn_Sales.add(mni_MonthSales);
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 600, 650);

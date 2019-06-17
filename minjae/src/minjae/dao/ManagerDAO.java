@@ -11,7 +11,7 @@ public class ManagerDAO extends DB{
 	
 	public List<CustomerDTO> getList(){
 		List<CustomerDTO> list = null;
-		String sql = "select * from Customer";
+		String sql = "select * from Customer order by name";
 		if(connect()) {
 			try {
 				stmt = conn.createStatement();
